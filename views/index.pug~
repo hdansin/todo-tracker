@@ -1,0 +1,11 @@
+extends layout
+
+block layout-content
+  div.View
+    div.Message
+      div.Title
+        h1 Welcome to Do It!
+        h3 A todo tracker featuring authentication with Auth0 and storage via MongoDB. 
+    div.NavButtons
+      a(href="/user")
+          div.NavButton Just dive in!

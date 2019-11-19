@@ -1,0 +1,6 @@
+$fg0: #2E3440;
+$bg0: #ECEFF4;
+
+body {
+    background: $fg0;
+}
