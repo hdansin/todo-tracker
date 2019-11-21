@@ -4,7 +4,9 @@
   "description": "A todo tracker app.",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon ./app.js"
+    "dev": "nodemon ./app.js",
+    "ui": "browser-sync start --proxy=localhost:8000 --files='**/*.css, **/*.pug, **/*.js' --ignore=node_modules --reload-delay 10 --no-ui --no-notify",
+    "start": "nodemon ./app.js"
   },
   "repository": {
     "type": "git",
