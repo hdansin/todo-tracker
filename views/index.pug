@@ -7,5 +7,9 @@ block layout-content
         h1 Welcome to Do It!
         h3 A todo tracker featuring authentication with Auth0 and storage via MongoDB. 
     div.NavButtons
-      a(href="/user")
-          div.NavButton Just dive in!
+      if isAuthenticated
+        a(href="/user")
+          div.NavButton Get Started!
+      else
+        a(href="/login")
+          div.NavButton Log in

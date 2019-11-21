@@ -7,7 +7,7 @@ A todo tracker made with nodeJS and express that features authentication using A
 - [x] Initialize to Github and template with express.
 - [x] Connect with heroku and deploy a basic view.
 - [x] write SRS.
-- [ ] Configure app to use Auth0.
+- [x] Configure app to use Auth0.
 - [ ] Connect to MongoDB.
 - [ ] Configure User creation.
 - [ ] Prototype functionality.
