@@ -16,6 +16,18 @@ require("dotenv").config(); // Load the environment variables
 
 const authRouter = require("./auth");
 
+// Mongoose/Mongo
+var mongoose = require("mongoose");
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).
+    catch(error => console.log(error));
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  console.log("Connected!");
+});
+
 
 /**
  * App Variables
@@ -120,11 +132,17 @@ app.get("/", (req, res) => {
     res.render("index", {title: "Home" });
 });
 
+var mockTaskList = { 
+    "task1": { "task": "Make coffee", "dateCreated": new Date(), "dueDate": new Date('11-22-2019').toDateString(), "description": "French press is the only acceptable coffee.", "done": false  },
+    "task2": { "task": "Go to work.", "dateCreated": new Date(), "dueDate": "", "description": "", "done": false  } 
+    }
+
 app.get("/user", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   res.render("user", {
     title: "Profile",
-    userProfile: userProfile
+    userProfile: userProfile,
+    mockTaskList: mockTaskList
   });
 });
 
