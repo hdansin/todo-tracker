@@ -132,9 +132,14 @@ app.get("/", (req, res) => {
     res.render("index", {title: "Home" });
 });
 
+// Testing
+var today = new Date();
+console.log(today);
+
+// Testing
 var mockTaskList = { 
-    "task1": { "task": "Make coffee", "dateCreated": new Date(), "dueDate": new Date('11-22-2019').toDateString(), "description": "French press is the only acceptable coffee.", "done": false  },
-    "task2": { "task": "Go to work.", "dateCreated": new Date(), "dueDate": "", "description": "", "done": false  } 
+    "task1": { "task": "Make coffee", "dateCreated": today.toDateString(), "dueDate": new Date('11-23-2019').toDateString(), "description": "French press is the only acceptable coffee.", "done": false  },
+    "task2": { "task": "Go to work.", "dateCreated": today.toDateString(), "dueDate": today.toDateString(), "description": "", "done": false  } 
     }
 
 app.get("/user", secured, (req, res, next) => {
