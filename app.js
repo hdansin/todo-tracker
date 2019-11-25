@@ -18,7 +18,7 @@ const authRouter = require("./auth");
 
 // Mongoose/Mongo
 var mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true }).
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }).
     catch(error => console.log(error));
 
 var db = mongoose.connection;
@@ -28,6 +28,15 @@ db.once('open', function() {
   console.log("Connected!");
 });
 
+var userSchema = mongoose.Schema({ 
+    user_id: String,
+    task_list: [ { body: String, dueDate: String, dateCreated: String, description: String, tags: Array, done: Boolean } ]
+}); 
+var User = mongoose.model('User', userSchema);
+
+// Multer for task submission
+var multer = require('multer');
+var upload = multer();
 
 /**
  * App Variables
@@ -144,11 +153,64 @@ var mockTaskList = {
 
 app.get("/user", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
-  res.render("user", {
-    title: "Profile",
-    userProfile: userProfile,
-    mockTaskList: mockTaskList
+  // check if user is in db and add new user if not
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (! taskUser) { // if user is null the user needs to be created
+        console.log('created');
+        User.create({ user_id: userProfile.user_id, task_list: []  }, function(err, result) {
+            if (err) return console.log(err);
+        }); 
+    }    
+    console.log('user: ' + taskUser) //DB
+
+    res.render("user", {
+        title: "Profile",
+        userProfile: userProfile,
+        taskList: taskUser.task_list,
+        mockTaskList: mockTaskList
+    });
+
   });
+  
+  
+});
+
+app.post("/newTask", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body) // DB
+
+  var tagParse = function () {
+    if (req.body.tags) {
+        let tagArr = [];
+        let newTag = "";
+        for (let i = 0; i < req.body.tags.length; i++) {
+            if (req.body.tags[i] === ","){
+                tagArr.push(newTag); 
+                newTag = "";
+                i++;
+            }
+            newTag += req.body.tags[i];
+        }
+    }
+    return tagArr;
+  }
+  
+    User.findOne({ user_id: userProfile.user_id  }, function(err, taskUser) {
+        if (err) return console.log(err);
+        // Make new task
+        let today = new Date();
+        let task = { body: req.body.body, description: req.body.description, tags: tagParse, dueDate: req.body.dueDate, dateCreated: today.toDateString(), done: false }
+        let newList = taskUser.task_list;
+        // Update and save user's task list
+        newList.push(task);
+        taskUser.task_list = newList;
+        taskUser.save(function (err, result){
+            if (err) return console.log(err);
+        })
+
+      console.log('found' + taskUser);
+    });
+    res.redirect('user')
 });
 
 

@@ -7,16 +7,24 @@ block layout-content
       div.Title
         h2 Let's get to work:
         ul
-            each t in mockTaskList
+            each t in taskList
                 div.Task
                     h4
-                        li= t.task  
+                        li= t.body  
                     if t.description
                         p
                             em= ' - ' + t.description
                     if t.dueDate
                         p= ' - ' + 'Due: ' + t.dueDate
-      pre.Details=JSON.stringify(userProfile, null, 2)
+    div.NewTask
+        form(action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
+            input(type="text" name="body" required="true" placeholder="Enter new task here.")
+            input(type="text" name="description" placeholder="Description.")
+            input(type="text" name="tags" placeholder="Add tags, separated by comma.")
+            input(type="date" name="dueDate")
+            input(type="submit" name="submit" value="Add")
+
+
     div.NavButtons
       a(href="/logout")
         div.NavButton Log out
