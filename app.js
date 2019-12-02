@@ -18,24 +18,38 @@ const authRouter = require("./auth");
 
 // Mongoose/Mongo
 var mongoose = require("mongoose");
-mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true }).
-    catch(error => console.log(error));
+mongoose
+  .connect(process.env.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .catch(error => console.log(error));
 
 var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", function() {
   // we're connected!
   console.log("Connected!");
 });
 
-var userSchema = mongoose.Schema({ 
-    user_id: String,
-    task_list: [ { body: String, dueDate: String, dateCreated: String, description: String, tags: Array, done: Boolean } ]
-}); 
-var User = mongoose.model('User', userSchema);
+var userSchema = mongoose.Schema({
+  user_id: String,
+  task_list: [
+    {
+      body: String,
+      dueDate: String,
+      dateCreated: String,
+      dateCompleted: String,
+      description: String,
+      tags: Array,
+      done: Boolean
+    }
+  ]
+});
+var User = mongoose.model("User", userSchema);
 
 // Multer for task submission
-var multer = require('multer');
+var multer = require("multer");
 var upload = multer();
 
 /**
@@ -44,7 +58,6 @@ var upload = multer();
 
 const app = express();
 const port = process.env.PORT || "8000";
-
 
 /**
  * Session Configuration
@@ -62,11 +75,9 @@ if (app.get("env") === "production") {
   session.cookie.secure = true;
 }
 
-
 /**
  * Passport Configuration
  */
-
 
 const strategy = new Auth0Strategy(
   {
@@ -89,11 +100,9 @@ const strategy = new Auth0Strategy(
   }
 );
 
-
 /**
  *  App Configuration
  */
-
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
@@ -104,7 +113,6 @@ app.use(expressSession(session));
 passport.use(strategy);
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 passport.serializeUser((user, done) => {
   done(null, user);
@@ -123,7 +131,6 @@ app.use((req, res, next) => {
 // Router mounting
 app.use("/", authRouter);
 
-
 /**
  * Routes Definitions
  */
@@ -138,87 +145,107 @@ const secured = (req, res, next) => {
 
 // Defined routes
 app.get("/", (req, res) => {
-    res.render("index", {title: "Home" });
+  res.render("index", { title: "Home" });
 });
-
-// Testing
-var today = new Date();
-console.log(today);
-
-// Testing
-var mockTaskList = { 
-    "task1": { "task": "Make coffee", "dateCreated": today.toDateString(), "dueDate": new Date('11-23-2019').toDateString(), "description": "French press is the only acceptable coffee.", "done": false  },
-    "task2": { "task": "Go to work.", "dateCreated": today.toDateString(), "dueDate": today.toDateString(), "description": "", "done": false  } 
-    }
 
 app.get("/user", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (! taskUser) { // if user is null the user needs to be created
-        console.log('created');
-        User.create({ user_id: userProfile.user_id, task_list: []  }, function(err, result) {
-            if (err) return console.log(err);
-        }); 
-    }    
-    console.log('user: ' + taskUser) //DB
-
+    if (!taskUser) {
+      // if user is null the user needs to be created
+      console.log("created");
+      User.create({ user_id: userProfile.user_id, task_list: [] }, function(
+        err,
+        result
+      ) {
+        if (err) return console.log(err);
+      });
+    }
     res.render("user", {
-        title: "Profile",
-        userProfile: userProfile,
-        taskList: taskUser.task_list,
-        mockTaskList: mockTaskList
+      title: "Profile",
+      userProfile: userProfile,
+      taskList: taskUser.task_list
     });
-
   });
-  
-  
+});
+
+app.post("/done", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); // DB
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list[0]); //DB
+    let newList = taskUser.task_list;
+    for (let i = 0; i < newList.length; i++) {
+      if (newList[i]._id == req.body.taskId) {
+        console.log("marking done");
+        newList[i].done = true;
+        newList[i].dateCompleted = new Date().toDateString();
+        console.log(newList[i]);
+      }
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
 });
 
 app.post("/newTask", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
-  console.log(req.body) // DB
+  console.log(req.body); // DB
 
-  var tagParse = function () {
+  var tagParse = function() {
+    console.log("parsing tags...");
+    console.log(req.body.tags);
     if (req.body.tags) {
-        let tagArr = [];
-        let newTag = "";
-        for (let i = 0; i < req.body.tags.length; i++) {
-            if (req.body.tags[i] === ","){
-                tagArr.push(newTag); 
-                newTag = "";
-                i++;
-            }
-            newTag += req.body.tags[i];
+      var tagArr = [];
+      let newTag = "";
+      for (let i = 0; i < req.body.tags.length; i++) {
+        if (req.body.tags[i] === ",") {
+          tagArr.push(newTag);
+          newTag = "";
+          i++;
         }
+        newTag += req.body.tags[i];
+      }
+      tagArr.push(newTag); // to push last tag
     }
     return tagArr;
-  }
-  
-    User.findOne({ user_id: userProfile.user_id  }, function(err, taskUser) {
-        if (err) return console.log(err);
-        // Make new task
-        let today = new Date();
-        let task = { body: req.body.body, description: req.body.description, tags: tagParse, dueDate: req.body.dueDate, dateCreated: today.toDateString(), done: false }
-        let newList = taskUser.task_list;
-        // Update and save user's task list
-        newList.push(task);
-        taskUser.task_list = newList;
-        taskUser.save(function (err, result){
-            if (err) return console.log(err);
-        })
+  };
 
-      console.log('found' + taskUser);
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    // Make new task
+    let today = new Date();
+    let tags = tagParse();
+    let task = {
+      body: req.body.body,
+      description: req.body.description,
+      tags: tags,
+      dueDate: req.body.dueDate,
+      dateCreated: today.toDateString(),
+      done: false
+    };
+    let newList = taskUser.task_list;
+    // Update and save user's task list
+    newList.push(task);
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
     });
-    res.redirect('user')
+  }).then(function() {
+    res.redirect("user");
+  });
 });
-
 
 /**
  * Server Activation
  */
 
-
 app.listen(port, () => {
-    console.log(`Listening to requests on http://localhost:${port}`);
+  console.log(`Listening to requests on http://localhost:${port}`);
 });
