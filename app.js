@@ -152,8 +152,10 @@ app.get("/user", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    var taskList = taskUser.taskList;
     if (!taskUser) {
       // if user is null the user needs to be created
+      taskList = [];
       console.log("created");
       User.create({ user_id: userProfile.user_id, task_list: [] }, function(
         err,

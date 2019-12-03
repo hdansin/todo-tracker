@@ -33,6 +33,22 @@ a {
     flex-direction: column;
 }
 
+input[type="text"],
+input[type="date"] {
+    background: $bg0;
+    margin: 2px;
+    border-bottom: solid 2px $fg0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+}
+
+input[type="submit"] {
+    background: $link;
+    color: $bg0;
+    border: none;
+    border-radius: 5px;
+}
 
 .View {
     flex: 1;
@@ -50,8 +66,8 @@ a {
 .Message {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: left;
+    justify-content: left;
     width: 100%;
     background: $bg0;
     padding: 30px;
@@ -59,6 +75,11 @@ a {
 
 .Message > .Title {
   padding-bottom: 20px;
+  display: flex;
+}
+
+.Task {
+
 }
 
 .NavButtons {

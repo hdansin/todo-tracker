@@ -18,6 +18,21 @@ a {
   display: flex;
   flex-direction: column; }
 
+input[type="text"],
+input[type="date"] {
+  background: #ECEFF4;
+  margin: 2px;
+  border-bottom: solid 2px #2E3440;
+  border-top: none;
+  border-left: none;
+  border-right: none; }
+
+input[type="submit"] {
+  background: #5E81AC;
+  color: #ECEFF4;
+  border: none;
+  border-radius: 5px; }
+
 .View {
   flex: 1;
   display: flex;
@@ -31,14 +46,15 @@ a {
 .Message {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   width: 100%;
   background: #ECEFF4;
   padding: 30px; }
 
 .Message > .Title {
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  display: flex; }
 
 .NavButtons {
   display: flex;

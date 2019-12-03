@@ -7,22 +7,18 @@ block layout-content
       div.Title
         h2 Let's get to work:
         ul
-            each t in taskList
-              if(!t.done)
-                div.Task
-                    h4
-                        li= t.body  
-                    if t.description
-                        p
-                            em= ' - ' + t.description
-                    if t.dueDate
-                        p= ' - ' + 'Due: ' + t.dueDate
-                    form(action="/done" enctype="multipart/form-data" name="doneForm" method="post")
-                      input(type="hidden" name="taskId" value=t._id id="taskId")
-                      input(type="submit" name="doneTask" value="mark done")
-
+          each task in taskList
+            if(!task.done)
+              li
+                strong= task.body
+                p= task.description 
+                  em= ' - ' + task.dueDate
+                form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
+                  input(type="hidden" id="taskId" name="taskId" value=task._id)
+                  input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="mark done")
+                
     div.NewTask
-        form(action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
+        form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
             input(type="text" name="body" required="true" placeholder="Enter new task here")
             input(type="text" name="description" placeholder="Description")
             input(type="text" name="tags" placeholder="Add tags, separated by comma")
