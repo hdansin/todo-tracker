@@ -49,12 +49,29 @@ input[type="submit"] {
   align-items: left;
   justify-content: left;
   width: 100%;
-  background: #ECEFF4;
-  padding: 30px; }
+  background: #ECEFF4; }
 
-.Message > .Title {
-  padding-bottom: 20px;
-  display: flex; }
+.Tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
+  flex-wrap: wrap;
+  max-height: 75vh;
+  padding: 5px; }
+
+.Task {
+  display: flex;
+  justify-content: start; }
+
+.taskItem {
+  padding-left: 10px; }
+
+#tags {
+  color: #3b4252; }
+
+em {
+  font-size: 14px; }
 
 .NavButtons {
   display: flex;
