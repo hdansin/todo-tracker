@@ -3,6 +3,7 @@ $fg0: #2E3440;
 $fg1: #3b4252;
 $bg0: #ECEFF4;
 $link: #5E81AC;
+$tags: #a3be8c;
 
 
 * {
@@ -58,8 +59,8 @@ input[type="submit"] {
   justify-content: space-between;
   align-items: flex-start;
   height: 100%;
-  width: 100%;
-
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px;
 }
 
@@ -70,6 +71,15 @@ input[type="submit"] {
   justify-content: left;
   width: 100%;
   background: $bg0;
+}
+
+#tagLabel {
+  color: $fg1;
+}
+
+#tagList {
+  display: flex;
+  max-width: 800px;
 }
 
 .Tasks {
@@ -85,6 +95,7 @@ input[type="submit"] {
 
 .Task {
   width:100%;
+  max-width: 800px;
   display: flex;
   justify-content: space-between;
 }

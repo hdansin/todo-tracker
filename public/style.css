@@ -40,7 +40,8 @@ input[type="submit"] {
   justify-content: space-between;
   align-items: flex-start;
   height: 100%;
-  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 20px; }
 
 .Message {
@@ -50,6 +51,13 @@ input[type="submit"] {
   justify-content: left;
   width: 100%;
   background: #ECEFF4; }
+
+#tagLabel {
+  color: #3b4252; }
+
+#tagList {
+  display: flex;
+  max-width: 800px; }
 
 .Tasks {
   display: flex;
@@ -63,6 +71,7 @@ input[type="submit"] {
 
 .Task {
   width: 100%;
+  max-width: 800px;
   display: flex;
   justify-content: space-between; }
 
