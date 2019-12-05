@@ -9,29 +9,31 @@ block layout-content
         each task in taskList
           if(!task.done)
             div.Task
-              div.taskItem
-                form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
+              div.taskBody
+                div.taskItem
+                  form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                     input(type="hidden" id="taskId" name="taskId" value=task._id)
                     input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="mark done")
-              div.taskItem
-                strong= task.body
-              if(task.description)
                 div.taskItem
-                  div= task.description 
-              if(task.tags.length > 0)
-                div.taskItem
-                  div#tags= task.tags
-              if(task.dueDate)
-                div.taskItem
-                  em= task.dueDate
-                                
+                  strong= task.body
+                if(task.description)
+                  div.taskItem
+                    div= task.description 
+              div.taskInfo
+                if(task.tags.length > 0)
+                  div.taskItem
+                    div#tags= task.tags
+                if(task.dueDate)
+                  div.taskItem
+                    em= task.dueDate
+
     div.NewTask
-        form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
-            input(type="text" name="body" required="true" placeholder="Enter new task here")
-            input(type="text" name="description" placeholder="Description")
-            input(type="text" name="tags" placeholder="Add tags, separated by comma")
-            input(type="date" name="dueDate")
-            input(type="submit" name="submit" value="Add")
+      form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
+        input(type="text" name="body" required="true" placeholder="Enter new task here")
+        input(type="text" name="description" placeholder="Description")
+        input(type="text" name="tags" placeholder="Add tags, separated by comma")
+        input(type="date" name="dueDate")
+        input(type="submit" name="submit" value="Add")
 
 
     div.NavButtons

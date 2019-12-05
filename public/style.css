@@ -58,11 +58,20 @@ input[type="submit"] {
   justify-content: start;
   flex-wrap: wrap;
   max-height: 75vh;
+  width: 100%;
   padding: 5px; }
 
 .Task {
+  width: 100%;
   display: flex;
-  justify-content: start; }
+  justify-content: space-between; }
+
+.taskBody {
+  display: flex;
+  justify-content: space-evenly; }
+
+.taskInfo {
+  display: flex; }
 
 .taskItem {
   padding-left: 10px; }
