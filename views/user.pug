@@ -4,6 +4,13 @@ block layout-content
   div.View.UserView
     h1.Banner Hi, #{userProfile.nickname}!
     h3 Let's get to work:
+    div.showButtons
+      form(id="showAll" action="/showAll" name="showAll" method="get")
+        input(name="showAll" id="showAll" type="submit" value="show all")
+      form(id="showCompleted" action="/showCompleted" name="showCompleted" method="get")
+        input(name="showCompleted" id="showCompleted" type="submit" value="show done")
+      form(id="showUncompleted" action="/showUncompleted" name="showUncompleted" method="get")
+        input(name="showUncompleted" id="showUncompleted" type="submit" value="show undone")
     div#tagList
       form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
         each tag in tagList
@@ -17,6 +24,21 @@ block layout-content
             div.Task
               div.taskBody
                 div.taskItem
+                  form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
+                    input(id="taskId" name="taskId" type="hidden" value=task._id)
+                    input(type="submit" name="submit" value="delete")
+                  form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
+                    input(type="hidden" name="taskId" id="taskId" value=task._id)
+                    input(type="submit" name="submit" value="edit")
+                  if(task.edit)
+                    form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
+                      input(type="text" name="body" required="true" value=task.body placeholder=task.body)
+                      input(type="text" name="description" value=task.description placeholder=task.description)
+                      input(type="text" name="tags" placeholder=task.tags)
+                      input(type="date" name="dueDate" value=task.dueDate)
+                      input(type="hidden" name="taskId" id="taskId" value=task._id)
+                      input(type="submit" name="submit" value="Edit")
+
                   form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                     input(type="hidden" id="taskId" name="taskId" value=task._id)
                     input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="mark done")

@@ -43,7 +43,8 @@ var userSchema = mongoose.Schema({
       description: String,
       tags: Array,
       done: Boolean,
-      show: Boolean
+      show: Boolean,
+      edit: Boolean
     }
   ]
 });
@@ -151,6 +152,16 @@ app.get("/", (req, res) => {
 
 app.get("/user", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
+  // function that checks for duplicate tags given an array of tags and a tag
+  const isDuplicate = function(tag, tagArr) {
+    for (t in tagArr) {
+      if (tagArr[t].trim() === tag.trim()) {
+        return true;
+      }
+    }
+    return false;
+  };
+
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
     var taskList = taskUser.task_list;
@@ -170,7 +181,14 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].tags.length > 0) {
           for (let j = 0; j < taskList[i].tags.length; j++) {
-            tagList.push(taskList[i].tags[j]);
+            // prevent duplicates
+            if (tagList.length > 0) {
+              if (!isDuplicate(taskList[i].tags[j], tagList)) {
+                tagList.push(taskList[i].tags[j]);
+              }
+            } else {
+              tagList.push(taskList[i].tags[j]);
+            }
           }
         }
       }
@@ -178,9 +196,78 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
     res.render("user", {
       title: "Profile",
       userProfile: userProfile,
-      taskList: taskUser.task_list,
+      taskList: taskList,
       tagList: tagList
     });
+  });
+});
+
+app.get("/showAll", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Mark all task's show property to true
+    let newList = taskUser.task_list;
+    for (task in newList) {
+      newList[task].show = true;
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/showUncompleted", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); //DB
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Look for tasks with .done = false and mark .show = true
+    // and mark .show = false otherwise
+    let newList = taskUser.task_list;
+    for (task in newList) {
+      if (!newList[task].done) {
+        newList[task].show = true;
+      } else {
+        newList[task].show = false;
+      }
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/showCompleted", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); //DB
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Look for tasks with .done = true and mark .show = true
+    // and mark .show = false otherwise
+    let newList = taskUser.task_list;
+    for (task in newList) {
+      if (newList[task].done) {
+        newList[task].show = true;
+      } else {
+        newList[task].show = false;
+      }
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
   });
 });
 
@@ -197,7 +284,7 @@ app.post("/done", upload.none(), secured, (req, res, next) => {
         newList[i].done = true;
         newList[i].show = false;
         newList[i].dateCompleted = new Date().toDateString();
-        console.log(newList[i]);
+        console.log(newList[i]); //DB
       }
     }
     taskUser.task_list = newList;
@@ -256,11 +343,12 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   console.log(req.body); // DB
 
-  var tagParse = function() {
+  let tagParse = function() {
     console.log("parsing tags...");
     console.log(req.body.tags);
+    var tagArr = [];
+
     if (req.body.tags) {
-      var tagArr = [];
       let newTag = "";
       for (let i = 0; i < req.body.tags.length; i++) {
         if (req.body.tags[i] === ",") {
@@ -287,11 +375,112 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
       dueDate: req.body.dueDate,
       dateCreated: today.toDateString(),
       done: false,
-      show: true
+      show: true,
+      edit: false
     };
     let newList = taskUser.task_list;
     // Update and save user's task list
     newList.push(task);
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("user");
+  });
+});
+
+app.post("/showEditForm", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Find task by taskId and mark task.edit = true
+    let newList = taskUser.task_list;
+    for (task in newList) {
+      if (newList[task]._id == req.body.taskId) {
+        newList[task].edit = true;
+      }
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.post("/editTask", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); // DB
+
+  let tagParse = function() {
+    console.log("parsing tags...");
+    console.log(req.body.tags);
+    var tagArr = [];
+    if (req.body.tags) {
+      let newTag = "";
+      for (let i = 0; i < req.body.tags.length; i++) {
+        if (req.body.tags[i] === ",") {
+          tagArr.push(newTag);
+          newTag = "";
+          i++;
+        }
+        newTag += req.body.tags[i];
+      }
+      tagArr.push(newTag); // to push last tag
+    }
+    console.log("parsed: " + tagArr);
+    return tagArr;
+  };
+
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    // Find task by Id
+    let newList = taskUser.task_list;
+    let tags = [];
+    for (task in newList) {
+      if (newList[task]._id == req.body.taskId) {
+        if (req.body.tags) {
+          tags = tagParse();
+        } else {
+          tags = newList[task].tags;
+        }
+        newList[task].body = req.body.body;
+        newList[task].description = req.body.description;
+        newList[task].tags = tags;
+        newList[task].dueDate = req.body.dueDate;
+        newList[task].show = true;
+        newList[task].edit = false;
+      }
+    }
+    // Update and save user's task list
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("user");
+  });
+});
+
+app.post("/deleteTask", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); // DB
+
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    // Find task by Id
+    let newList = taskUser.task_list;
+    for (task in newList) {
+      if (newList[task]._id == req.body.taskId) {
+        console.log(newList.length); //DB
+        newList.splice(task, 1);
+        console.log(newList.length); //DB
+      }
+    }
+    // Update and save user's task list
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
