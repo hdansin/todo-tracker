@@ -26,27 +26,29 @@ block layout-content
                 div.taskItem
                   form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                     input(id="taskId" name="taskId" type="hidden" value=task._id)
-                    input(type="submit" name="submit" value="delete")
+                    input(type="submit" name="submit" value="✗")
                   form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
                     input(type="hidden" name="taskId" id="taskId" value=task._id)
-                    input(type="submit" name="submit" value="edit")
-                  if(task.edit)
-                    form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
-                      input(type="text" name="body" required="true" value=task.body placeholder=task.body)
-                      input(type="text" name="description" value=task.description placeholder=task.description)
-                      input(type="text" name="tags" placeholder=task.tags)
-                      input(type="date" name="dueDate" value=task.dueDate)
-                      input(type="hidden" name="taskId" id="taskId" value=task._id)
-                      input(type="submit" name="submit" value="Edit")
-
+                    input(type="submit" name="submit" value="✎")
+                  
                   form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                     input(type="hidden" id="taskId" name="taskId" value=task._id)
-                    input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="mark done")
+                    input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="☑")
                 div.taskItem
                   strong= task.body
                 if(task.description)
                   div.taskItem
                     div= task.description 
+              div.taskEdit
+                if(task.edit)
+                  form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
+                    input(type="text" name="body" required="true" value=task.body placeholder=task.body)
+                    input(type="text" name="description" value=task.description placeholder=task.description)
+                    input(type="text" name="tags" placeholder=task.tags)
+                    input(type="date" name="dueDate" value=task.dueDate)
+                    input(type="hidden" name="taskId" id="taskId" value=task._id)
+                    input(type="submit" name="submit" value="✓")
+
               div.taskInfo
                 if(task.tags.length > 0)
                   div.taskItem
@@ -54,7 +56,6 @@ block layout-content
                 if(task.dueDate)
                   div.taskItem
                     em= task.dueDate
-
     div.NewTask
       form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
         input(type="text" name="body" required="true" placeholder="Enter new task here")

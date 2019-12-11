@@ -30,8 +30,14 @@ input[type="date"] {
 input[type="submit"] {
   background: #5E81AC;
   color: #ECEFF4;
+  margin: 2px;
   border: none;
   border-radius: 5px; }
+
+.taskItem > form > input[type="submit"] {
+  background: none;
+  color: #2E3440;
+  font-size: 16px; }
 
 .View {
   flex: 1;
@@ -71,7 +77,6 @@ input[type="submit"] {
 
 .Task {
   width: 100%;
-  max-width: 800px;
   display: flex;
   justify-content: space-between; }
 
@@ -83,7 +88,22 @@ input[type="submit"] {
   display: flex; }
 
 .taskItem {
-  padding-left: 10px; }
+  display: flex;
+  padding-left: 10px;
+  justify-content: space-between; }
+
+#deleteTask,
+#showEditForm {
+  visibility: hidden; }
+
+.taskBody:hover #deleteTask {
+  visibility: visible; }
+
+.taskBody:hover #showEditForm {
+  visibility: visible; }
+
+#editTask {
+  width: 100%; }
 
 #tags {
   color: #3b4252; }
