@@ -34,6 +34,8 @@ db.once("open", function() {
 
 var userSchema = mongoose.Schema({
   user_id: String,
+  display: String,
+  view: String,
   task_list: [
     {
       body: String,
@@ -154,7 +156,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   // function that checks for duplicate tags given an array of tags and a tag
   const isDuplicate = function(tag, tagArr) {
-    for (t in tagArr) {
+    for (const t in tagArr) {
       if (tagArr[t].trim() === tag.trim()) {
         return true;
       }
@@ -165,10 +167,14 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
     var taskList = taskUser.task_list;
+    var display = taskUser.display;
+    var view = taskUser.view;
     var tagList = [];
     if (!taskUser) {
       // if user is null the user needs to be created
       taskList = [];
+      display = "ascending";
+      view = "full";
       console.log("created");
       User.create({ user_id: userProfile.user_id, task_list: [] }, function(
         err,
@@ -197,8 +203,55 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       title: "Profile",
       userProfile: userProfile,
       taskList: taskList,
-      tagList: tagList
+      tagList: tagList,
+      display: display,
+      view: view
     });
+  });
+});
+
+app.get("/viewFull", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Update user's 'view' property to 'minimal'
+    taskUser.view = "full";
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/viewRegular", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Update user's 'view' property to 'minimal'
+    taskUser.view = "regular";
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/viewMinimal", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Update user's 'view' property to 'minimal'
+    taskUser.view = "minimal";
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
   });
 });
 
@@ -209,7 +262,7 @@ app.get("/showAll", secured, (req, res, next) => {
     console.log(taskUser.task_list); //DB
     // Mark all task's show property to true
     let newList = taskUser.task_list;
-    for (task in newList) {
+    for (const task in newList) {
       newList[task].show = true;
     }
     taskUser.task_list = newList;
@@ -230,7 +283,7 @@ app.get("/showUncompleted", secured, (req, res, next) => {
     // Look for tasks with .done = false and mark .show = true
     // and mark .show = false otherwise
     let newList = taskUser.task_list;
-    for (task in newList) {
+    for (const task in newList) {
       if (!newList[task].done) {
         newList[task].show = true;
       } else {
@@ -255,12 +308,40 @@ app.get("/showCompleted", secured, (req, res, next) => {
     // Look for tasks with .done = true and mark .show = true
     // and mark .show = false otherwise
     let newList = taskUser.task_list;
-    for (task in newList) {
+    for (const task in newList) {
       if (newList[task].done) {
         newList[task].show = true;
       } else {
         newList[task].show = false;
       }
+    }
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return console.log(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/orderToggle", secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  console.log(req.body); //DB
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return console.log(err);
+    console.log(taskUser.task_list); //DB
+    // Reverse the order of the task list
+    let newList = [];
+    for (let task = taskUser.task_list.length - 1; task >= 0; task--) {
+      if (taskUser.task_list[task]) {
+        newList.push(taskUser.task_list[task]);
+      }
+    }
+    // Toggle display property
+    if (taskUser.display == "ascending") {
+      taskUser.display = "descending";
+    } else {
+      taskUser.display = "ascending";
     }
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
@@ -305,7 +386,7 @@ app.post("/tagSort", upload.none(), secured, (req, res, next) => {
     if (typeof req.body.tagNames === "string") {
       Arr.push(req.body.tagNames);
     } else {
-      for (tagName in req.body.tagNames) {
+      for (const tagName in req.body.tagNames) {
         Arr.push(req.body.tagNames[tagName]);
       }
     }
@@ -317,12 +398,12 @@ app.post("/tagSort", upload.none(), secured, (req, res, next) => {
     if (err) return console.log(err);
     let newList = taskUser.task_list;
     // look for tasks with the tags and mark their "show" property
-    for (task in newList) {
+    for (const task in newList) {
       // start by hiding all, then show ones that don't match
       newList[task].show = false;
-      for (tag in newList[task].tags) {
+      for (const tag in newList[task].tags) {
         if (newList[task].tags[tag]) {
-          for (sortItem in sortList) {
+          for (const sortItem in sortList) {
             if (sortList[sortItem].trim() === newList[task].tags[tag].trim()) {
               newList[task].show = true;
             }
@@ -380,7 +461,12 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
     };
     let newList = taskUser.task_list;
     // Update and save user's task list
-    newList.push(task);
+    // check display order so it is added at proper place
+    if (taskUser.display == "ascending") {
+      newList.unshift(task);
+    } else {
+      newList.push(task);
+    }
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
@@ -397,7 +483,7 @@ app.post("/showEditForm", upload.none(), secured, (req, res, next) => {
     console.log(taskUser.task_list); //DB
     // Find task by taskId and mark task.edit = true
     let newList = taskUser.task_list;
-    for (task in newList) {
+    for (const task in newList) {
       if (newList[task]._id == req.body.taskId) {
         newList[task].edit = true;
       }
@@ -440,7 +526,7 @@ app.post("/editTask", upload.none(), secured, (req, res, next) => {
     // Find task by Id
     let newList = taskUser.task_list;
     let tags = [];
-    for (task in newList) {
+    for (const task in newList) {
       if (newList[task]._id == req.body.taskId) {
         if (req.body.tags) {
           tags = tagParse();
@@ -473,7 +559,7 @@ app.post("/deleteTask", upload.none(), secured, (req, res, next) => {
     if (err) return console.log(err);
     // Find task by Id
     let newList = taskUser.task_list;
-    for (task in newList) {
+    for (const task in newList) {
       if (newList[task]._id == req.body.taskId) {
         console.log(newList.length); //DB
         newList.splice(task, 1);

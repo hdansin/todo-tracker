@@ -49,6 +49,11 @@ input[type="submit"] {
   border-radius: 5px;
 }
 
+
+input[type="submit"]:hover {
+  cursor: pointer;
+}
+
 .taskItem > form > input[type="submit"] {
   background: none;
   color: $fg0;
@@ -59,7 +64,6 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 100vh;
   margin: 0 auto;
 }
 
@@ -67,12 +71,12 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   align-items: left;
-  justify-content: left;
+  justify-content: space-between;
   width: 100%;
   background: $bg0;
 }
 
-// style the show buttons
+// style the show/style buttons
 ul {
   list-style-type: none;
   padding-left: 5px;
@@ -80,7 +84,10 @@ ul {
 
 #showUncompleted,
 #showAll,
-#showCompleted {
+#showCompleted,
+#viewMinimal,
+#viewRegular,
+#viewFull {
   display: none;
   height: auto;
   width: auto;
@@ -88,24 +95,63 @@ ul {
   color: $bg0;
 }
 
+#orderToggle {
+  display: flex;
+  align-items: center;
+}
+
+#orderToggleButton {
+  background: none;
+  font-size: 16px;
+}
+
+#orderToggleButton:hover {
+  cursor: pointer;
+}
+
+// Style tags
+#tagList {
+  display: flex;
+  max-width: 800px;
+  height: auto;
+  width: auto;
+  background: $fg1;
+  color: $bg0;
+}
+
+#tagOption {
+  background: $fg1;
+  color: $bg0;
+  display: none;
+}
+
+#tagFilter {
+  display: none;
+}
+
+// submenu hover hint
 #showUncompleted:hover,
 #showAll:hover,
-#showCompleted:hover {
+#showCompleted:hover,
+#tagOption:hover,
+#viewMinimal:hover,
+#viewRegular:hover,
+#viewFull:hover {
   background: $link;
 }
 
+// style nav
 .displayMenu {
   display: flex;
+  list-style-type: none;
   flex-grow: 2;
-  justify-content: space-between;
   margin: 20px 0px 20px 0px;
-  background: $bg0;
   border-radius: 5px;
+  background: $fg1;
 }
 
 .showMenu {
-  padding: 3px;
-  border-radius: 5px;
+  padding-left: 10px;
   background: $fg1;
   color: $bg0;
 }
@@ -114,22 +160,24 @@ ul {
   cursor: default;
 }
 
+// show sub-menus on hover
 .showMenu:hover #showAll,
 .showMenu:hover #showCompleted,
-.showMenu:hover #showUncompleted {
+.showMenu:hover #showUncompleted, 
+.showMenu:hover #tagOption,
+.showMenu:hover #viewMinimal,
+.showMenu:hover #viewRegular,
+.showMenu:hover #viewFull {
   color: $bg0;
   display: block;
 }
 
-// Style tags
-#tagLabel {
-  color: $fg1;
+.showMenu:hover #tagName,
+.showMenu:hover #tagLabel,
+.showMenu:hover #tagFilter {
+  display: inline;
 }
 
-#tagList {
-  display: flex;
-  max-width: 800px;
-}
 
 .Tasks {
   display: flex;
@@ -146,7 +194,7 @@ ul {
 .Task {
   width:100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .taskBody {
@@ -187,6 +235,27 @@ ul {
 
 em {
   font-size: 14px;
+}
+
+.logOut {
+  margin: 0px 10px 0px auto;
+  display: flex;
+  align-items: center;
+}
+
+.logOutButton {
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.logOutButton:hover {
+  background: $link;
+  cursor: pointer;
+}
+
+.logOut a {
+  color: $bg0;
+  text-decoration: none;
 }
 
 .NavButtons {

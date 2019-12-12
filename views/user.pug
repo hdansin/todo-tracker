@@ -2,10 +2,9 @@ extends layout
 
 block layout-content
   div.View.UserView
-    div
+    div.Message
       h1 Hi, #{userProfile.nickname}!
       h3 Let's get to work:
-    div.Message
       div.showButtons
         nav.displayMenu
           ul.showMenu Show
@@ -18,31 +17,47 @@ block layout-content
             li 
               form(id="showUncompleted" action="/showUncompleted" name="showUncompleted" method="get")
                 input(name="showUncompleted" id="showUncompleted" type="submit" value="Incomplete")
-      div#tagList
-        form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
-          each tag in tagList
-            input(type="checkbox" value=tag id="tagName" name="tagNames")
-            label(for=tag id="tagLabel") #{tag}
-          input(type="submit" name="submit" value="filter")
-      div.Tasks
-        each task in taskList
-          if(task.show)
-            div.Task
-              div.taskBody
-                div.taskItem
-                  form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
-                    input(id="taskId" name="taskId" type="hidden" value=task._id)
-                    input(type="submit" name="submit" value="✗")
-                  form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
-                    input(type="hidden" name="taskId" id="taskId" value=task._id)
-                    input(type="submit" name="submit" value="✎")
+          ul.showMenu(id="tagList") Tags
+            form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
+              each tag in tagList
+                div#tagOption
+                  input(type="checkbox" value=tag id="tagName" name="tagNames")
+                  label(for=tag id="tagLabel") #{tag}
+              input(id="tagFilter" type="submit" name="submit" value="filter")
+          ul.showMenu View
+            li 
+              form(id="viewMinimal" action="/viewMinimal" name="viewMinimal" method="get")
+                input(name="viewMinimal" id="viewMinimal" type="submit" value=view == "minimal" ? "Minimal ✓" : "Minimal")
+              form(id="viewRegular" action="/viewRegular" name="viewRegular" method="get")
+                input(name="viewRegular" id="viewRegular" type="submit" value=view == "regular" ? "Regular ✓" : "Regular")
+              form(id="viewFull" action="/viewFull" name="viewFull" method="get")
+                input(name="viewFull" id="viewFull" type="submit" value=view == "full" ? "Full ✓" : "Full")
+          form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
+            input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")
+          div.logOut
+            a(href="/logout")
+              div.logOutButton Log Out
+ 
+    div.Tasks
+      each task in taskList
+        if(task.show)
+          div.Task
+            div.taskBody
+              div.taskItem
+                form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
+                  input(id="taskId" name="taskId" type="hidden" value=task._id)
+                  input(type="submit" name="submit" value="✗")
+                form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
+                  input(type="hidden" name="taskId" id="taskId" value=task._id)
+                  input(type="submit" name="submit" value="✎")
 
-                  form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
-                    input(type="hidden" id="taskId" name="taskId" value=task._id)
-                    input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
-                div.taskItem
-                  strong= task.body
-                if(task.description)
+                form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
+                  input(type="hidden" id="taskId" name="taskId" value=task._id)
+                  input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
+              div.taskItem
+                strong= task.body
+            if(view !== "minimal")
+              if(task.description)
                   div.taskItem
                     div= task.description 
               div.taskEdit
@@ -54,7 +69,7 @@ block layout-content
                     input(type="date" name="dueDate" value=task.dueDate)
                     input(type="hidden" name="taskId" id="taskId" value=task._id)
                     input(type="submit" name="submit" value="✓")
-
+            if(view !== "minimal" && view !== "regular")
               div.taskInfo
                 if(task.tags.length > 0)
                   div.taskItem
@@ -63,15 +78,10 @@ block layout-content
                   div.taskItem
                     div.taskDate
                       em= task.dueDate
-      div.NewTask
-        form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
-          input(type="text" name="body" required="true" placeholder="Enter new task here")
-          input(type="text" name="description" placeholder="Description")
-          input(type="text" name="tags" placeholder="Add tags, separated by comma")
-          input(type="date" name="dueDate")
-          input(type="submit" name="submit" value="Add")
-
-
-    div.NavButtons
-      a(href="/logout")
-        div.NavButton Log out
+    div.NewTask
+      form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
+        input(type="text" name="body" required="true" placeholder="Enter new task here")
+        input(type="text" name="description" placeholder="Description")
+        input(type="text" name="tags" placeholder="Add tags, separated by comma")
+        input(type="date" name="dueDate")
+        input(type="submit" name="submit" value="Add")
