@@ -1,85 +1,192 @@
 // Colors from Nord color pallete
 $fg0: #2E3440;
+$fg1: #3b4252;
 $bg0: #ECEFF4;
 $link: #5E81AC;
-
+$tags: #a3be8c;
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
-
 
 html,
 body,
 #root {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
-
 
 body {
-    background: $bg0;
-    color: $fg0;
+  background: $bg0;
+  color: $fg0;
 }
 
-
 a {
-    color: $link;
+  color: $link;
 }
 
 
 #root {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 input[type="text"],
 input[type="date"] {
-    background: $bg0;
-    margin: 2px;
-    border-bottom: solid 2px $fg0;
-    border-top: none;
-    border-left: none;
-    border-right: none;
+  background: $bg0;
+  margin: 2px;
+  border-bottom: solid 2px $fg0;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 input[type="submit"] {
-    background: $link;
-    color: $bg0;
-    border: none;
-    border-radius: 5px;
+  background: $link;
+  color: $bg0;
+  margin: 2px;
+  border: none;
+  border-radius: 5px;
+}
+
+.taskItem > form > input[type="submit"] {
+  background: none;
+  color: $fg0;
+  font-size: 16px;
 }
 
 .View {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    height: 100%;
-    width: 100%;
-
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  margin: 0 auto;
 }
 
 .Message {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: left;
-    width: 100%;
-    background: $bg0;
-    padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  width: 100%;
+  background: $bg0;
 }
 
-.Message > .Title {
-  padding-bottom: 20px;
+// style the show buttons
+ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+#showUncompleted,
+#showAll,
+#showCompleted {
+  display: none;
+  height: auto;
+  width: auto;
+  background: none;
+  color: $bg0;
+}
+
+#showUncompleted:hover,
+#showAll:hover,
+#showCompleted:hover {
+  background: $link;
+}
+
+.displayMenu {
   display: flex;
+  flex-grow: 2;
+  justify-content: space-between;
+  margin: 20px 0px 20px 0px;
+  background: $bg0;
+  border-radius: 5px;
+}
+
+.showMenu {
+  padding: 3px;
+  border-radius: 5px;
+  background: $fg1;
+  color: $bg0;
+}
+
+.showMenu:hover {
+  cursor: default;
+}
+
+.showMenu:hover #showAll,
+.showMenu:hover #showCompleted,
+.showMenu:hover #showUncompleted {
+  color: $bg0;
+  display: block;
+}
+
+// Style tags
+#tagLabel {
+  color: $fg1;
+}
+
+#tagList {
+  display: flex;
+  max-width: 800px;
+}
+
+.Tasks {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
+  flex-wrap: wrap;
+  max-height: 75vh;
+  width: 100%;
+  padding: 5px;
+  margin: 20px 0px 20px 0px;
 }
 
 .Task {
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+}
 
+.taskBody {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.taskInfo {
+  display: flex;
+}
+
+.taskItem {
+  display: flex;
+  padding-left: 10px;
+  justify-content: space-between;
+}
+
+#deleteTask,
+#showEditForm {
+  visibility: hidden;
+}
+
+.taskBody:hover #deleteTask {
+  visibility: visible;
+}
+
+.taskBody:hover #showEditForm {
+  visibility: visible;
+}
+
+#editTask {
+  width: 100%;
+}
+
+#tags {
+  color: $fg1;
+}
+
+em {
+  font-size: 14px;
 }
 
 .NavButtons {
@@ -87,7 +194,7 @@ input[type="submit"] {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  padding: 0 20px;
+  padding: 0px 20px;
 }
 
 .NavButton {
@@ -104,7 +211,7 @@ input[type="submit"] {
 
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  color: $bg0;
 
   text-transform: capitalize;
 }

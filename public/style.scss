@@ -5,11 +5,9 @@ $bg0: #ECEFF4;
 $link: #5E81AC;
 $tags: #a3be8c;
 
-
 * {
   box-sizing: border-box;
 }
-
 
 html,
 body,
@@ -18,12 +16,10 @@ body,
   width: 100%;
 }
 
-
 body {
   background: $bg0;
   color: $fg0;
 }
-
 
 a {
   color: $link;
@@ -60,15 +56,11 @@ input[type="submit"] {
 }
 
 .View {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
-  height: 100%;
-  max-width: 800px;
+  height: 100vh;
   margin: 0 auto;
-  padding: 20px;
 }
 
 .Message {
@@ -80,6 +72,56 @@ input[type="submit"] {
   background: $bg0;
 }
 
+// style the show buttons
+ul {
+  list-style-type: none;
+  padding-left: 5px;
+}
+
+#showUncompleted,
+#showAll,
+#showCompleted {
+  display: none;
+  height: auto;
+  width: auto;
+  background: none;
+  color: $bg0;
+}
+
+#showUncompleted:hover,
+#showAll:hover,
+#showCompleted:hover {
+  background: $link;
+}
+
+.displayMenu {
+  display: flex;
+  flex-grow: 2;
+  justify-content: space-between;
+  margin: 20px 0px 20px 0px;
+  background: $bg0;
+  border-radius: 5px;
+}
+
+.showMenu {
+  padding: 3px;
+  border-radius: 5px;
+  background: $fg1;
+  color: $bg0;
+}
+
+.showMenu:hover {
+  cursor: default;
+}
+
+.showMenu:hover #showAll,
+.showMenu:hover #showCompleted,
+.showMenu:hover #showUncompleted {
+  color: $bg0;
+  display: block;
+}
+
+// Style tags
 #tagLabel {
   color: $fg1;
 }
@@ -98,6 +140,7 @@ input[type="submit"] {
   max-height: 75vh;
   width: 100%;
   padding: 5px;
+  margin: 20px 0px 20px 0px;
 }
 
 .Task {
@@ -110,7 +153,6 @@ input[type="submit"] {
   display: flex;
   justify-content: space-evenly;
 }
-
 
 .taskInfo {
   display: flex;
@@ -152,7 +194,7 @@ em {
   width: 100%;
   justify-content: space-around;
   align-items: center;
-  padding: 0 20px;
+  padding: 0px 20px;
 }
 
 .NavButton {
@@ -169,7 +211,7 @@ em {
 
   font-size: 16px;
   font-weight: bold;
-  color: white;
+  color: $bg0;
 
   text-transform: capitalize;
 }

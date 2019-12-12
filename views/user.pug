@@ -2,22 +2,28 @@ extends layout
 
 block layout-content
   div.View.UserView
-    h1.Banner Hi, #{userProfile.nickname}!
-    h3 Let's get to work:
-    div.showButtons
-      form(id="showAll" action="/showAll" name="showAll" method="get")
-        input(name="showAll" id="showAll" type="submit" value="show all")
-      form(id="showCompleted" action="/showCompleted" name="showCompleted" method="get")
-        input(name="showCompleted" id="showCompleted" type="submit" value="show done")
-      form(id="showUncompleted" action="/showUncompleted" name="showUncompleted" method="get")
-        input(name="showUncompleted" id="showUncompleted" type="submit" value="show undone")
-    div#tagList
-      form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
-        each tag in tagList
-          input(type="checkbox" value=tag id="tagName" name="tagNames")
-          label(for=tag id="tagLabel") #{tag}
-        input(type="submit" name="submit" value="filter")
+    div
+      h1 Hi, #{userProfile.nickname}!
+      h3 Let's get to work:
     div.Message
+      div.showButtons
+        nav.displayMenu
+          ul.showMenu Show
+            li 
+              form(id="showAll" action="/showAll" name="showAll" method="get")
+                input(name="showAll" id="showAll" type="submit" value="All")
+            li 
+              form(id="showCompleted" action="/showCompleted" name="showCompleted" method="get")
+                  input(name="showCompleted" id="showCompleted" type="submit" value="Complete")
+            li 
+              form(id="showUncompleted" action="/showUncompleted" name="showUncompleted" method="get")
+                input(name="showUncompleted" id="showUncompleted" type="submit" value="Incomplete")
+      div#tagList
+        form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
+          each tag in tagList
+            input(type="checkbox" value=tag id="tagName" name="tagNames")
+            label(for=tag id="tagLabel") #{tag}
+          input(type="submit" name="submit" value="filter")
       div.Tasks
         each task in taskList
           if(task.show)
@@ -30,10 +36,10 @@ block layout-content
                   form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
                     input(type="hidden" name="taskId" id="taskId" value=task._id)
                     input(type="submit" name="submit" value="✎")
-                  
+
                   form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                     input(type="hidden" id="taskId" name="taskId" value=task._id)
-                    input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value="☑")
+                    input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
                 div.taskItem
                   strong= task.body
                 if(task.description)
@@ -55,14 +61,15 @@ block layout-content
                     div#tags= task.tags
                 if(task.dueDate)
                   div.taskItem
-                    em= task.dueDate
-    div.NewTask
-      form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
-        input(type="text" name="body" required="true" placeholder="Enter new task here")
-        input(type="text" name="description" placeholder="Description")
-        input(type="text" name="tags" placeholder="Add tags, separated by comma")
-        input(type="date" name="dueDate")
-        input(type="submit" name="submit" value="Add")
+                    div.taskDate
+                      em= task.dueDate
+      div.NewTask
+        form(id="taskForm" action="/newTask" enctype="multipart/form-data" name="taskForm" method="post")
+          input(type="text" name="body" required="true" placeholder="Enter new task here")
+          input(type="text" name="description" placeholder="Description")
+          input(type="text" name="tags" placeholder="Add tags, separated by comma")
+          input(type="date" name="dueDate")
+          input(type="submit" name="submit" value="Add")
 
 
     div.NavButtons
