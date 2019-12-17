@@ -50,10 +50,6 @@ input[type="submit"] {
 }
 
 
-input[type="submit"]:hover {
-  cursor: pointer;
-}
-
 .taskItem > form > input[type="submit"] {
   background: none;
   color: $fg0;
@@ -76,8 +72,9 @@ input[type="submit"]:hover {
   background: $bg0;
 }
 
-// style the show/style buttons
+// style the show/view buttons
 ul {
+  display: flex;
   list-style-type: none;
   padding-left: 5px;
 }
@@ -88,25 +85,66 @@ ul {
 #viewMinimal,
 #viewRegular,
 #viewFull {
-  display: none;
-  height: auto;
-  width: auto;
+  height: 0px;
+  opacity: 0;
+  border-radius: 3px;
   background: none;
   color: $bg0;
+  transition: all 0.5s ease-out;
 }
+
+//sub-menu hinting
+#showUncompleted input[type="submit"],
+#showAll input[type="submit"],
+#showCompleted input[type="submit"],
+#viewMinimal input[type="submit"],
+#viewRegular input[type="submit"],
+#viewFull input[type="submit"] {
+  background: none;
+  transition: all 1s ease-out;
+}
+
+#showUncompleted input[type="submit"]:hover,
+#showAll input[type="submit"]:hover,
+#showCompleted input[type="submit"]:hover,
+#viewMinimal input[type="submit"]:hover,
+#viewRegular input[type="submit"]:hover,
+#viewFull input[type="submit"]:hover {
+  background: $link;
+}
+
+// show sub-menus on hover
+.showMenu:hover #showAll,
+.showMenu:hover #showCompleted,
+.showMenu:hover #showUncompleted, 
+.showMenu:hover #viewMinimal,
+.showMenu:hover #viewRegular,
+.showMenu:hover #viewFull {
+  height: 30px;
+  opacity: 1;
+}
+
+.showMenu:hover #tagOption {
+  height: 30px;
+  opacity: 1;
+}
+
 
 #orderToggle {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 }
 
 #orderToggleButton {
   background: none;
   font-size: 16px;
+  padding: 5px;
+  transition: all 1s ease-out;
 }
 
 #orderToggleButton:hover {
   cursor: pointer;
+  background: $link;
 }
 
 // Style tags
@@ -122,21 +160,13 @@ ul {
 #tagOption {
   background: $fg1;
   color: $bg0;
-  display: none;
+  border-radius: 3px;
+  height: 0px;
+  opacity: 0;
+  transition: all 0.5s ease-out;
 }
 
-#tagFilter {
-  display: none;
-}
-
-// submenu hover hint
-#showUncompleted:hover,
-#showAll:hover,
-#showCompleted:hover,
-#tagOption:hover,
-#viewMinimal:hover,
-#viewRegular:hover,
-#viewFull:hover {
+#tagOption:hover {
   background: $link;
 }
 
@@ -151,6 +181,10 @@ ul {
 }
 
 .showMenu {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: auto;
   padding-left: 10px;
   background: $fg1;
   color: $bg0;
@@ -160,25 +194,7 @@ ul {
   cursor: default;
 }
 
-// show sub-menus on hover
-.showMenu:hover #showAll,
-.showMenu:hover #showCompleted,
-.showMenu:hover #showUncompleted, 
-.showMenu:hover #tagOption,
-.showMenu:hover #viewMinimal,
-.showMenu:hover #viewRegular,
-.showMenu:hover #viewFull {
-  color: $bg0;
-  display: block;
-}
-
-.showMenu:hover #tagName,
-.showMenu:hover #tagLabel,
-.showMenu:hover #tagFilter {
-  display: inline;
-}
-
-
+// Style tasks
 .Tasks {
   display: flex;
   flex-direction: column;
@@ -239,6 +255,7 @@ em {
 
 .logOut {
   margin: 0px 10px 0px auto;
+  padding: 10px;
   display: flex;
   align-items: center;
 }
@@ -246,6 +263,7 @@ em {
 .logOutButton {
   padding: 5px;
   border-radius: 3px;
+  transition: all 1s ease-out;
 }
 
 .logOutButton:hover {

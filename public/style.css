@@ -34,9 +34,6 @@ input[type="submit"] {
   border: none;
   border-radius: 5px; }
 
-input[type="submit"]:hover {
-  cursor: pointer; }
-
 .taskItem > form > input[type="submit"] {
   background: none;
   color: #2E3440;
@@ -57,6 +54,7 @@ input[type="submit"]:hover {
   background: #ECEFF4; }
 
 ul {
+  display: flex;
   list-style-type: none;
   padding-left: 5px; }
 
@@ -66,22 +64,56 @@ ul {
 #viewMinimal,
 #viewRegular,
 #viewFull {
-  display: none;
-  height: auto;
-  width: auto;
+  height: 0px;
+  opacity: 0;
+  border-radius: 3px;
   background: none;
-  color: #ECEFF4; }
+  color: #ECEFF4;
+  transition: all 0.5s ease-out; }
+
+#showUncompleted input[type="submit"],
+#showAll input[type="submit"],
+#showCompleted input[type="submit"],
+#viewMinimal input[type="submit"],
+#viewRegular input[type="submit"],
+#viewFull input[type="submit"] {
+  background: none;
+  transition: all 1s ease-out; }
+
+#showUncompleted input[type="submit"]:hover,
+#showAll input[type="submit"]:hover,
+#showCompleted input[type="submit"]:hover,
+#viewMinimal input[type="submit"]:hover,
+#viewRegular input[type="submit"]:hover,
+#viewFull input[type="submit"]:hover {
+  background: #5E81AC; }
+
+.showMenu:hover #showAll,
+.showMenu:hover #showCompleted,
+.showMenu:hover #showUncompleted,
+.showMenu:hover #viewMinimal,
+.showMenu:hover #viewRegular,
+.showMenu:hover #viewFull {
+  height: 30px;
+  opacity: 1; }
+
+.showMenu:hover #tagOption {
+  height: 30px;
+  opacity: 1; }
 
 #orderToggle {
   display: flex;
-  align-items: center; }
+  flex-direction: column; }
 
 #orderToggleButton {
   background: none;
-  font-size: 16px; }
+  font-size: 16px;
+  padding: 5px;
+  transition: all 1s ease-out; }
 
 #orderToggleButton:hover {
-  cursor: pointer; }
+  cursor: pointer;
+  background: #5E81AC; }
 
 #tagList {
   display: flex;
@@ -94,18 +126,12 @@ ul {
 #tagOption {
   background: #3b4252;
   color: #ECEFF4;
-  display: none; }
+  border-radius: 3px;
+  height: 0px;
+  opacity: 0;
+  transition: all 0.5s ease-out; }
 
-#tagFilter {
-  display: none; }
-
-#showUncompleted:hover,
-#showAll:hover,
-#showCompleted:hover,
-#tagOption:hover,
-#viewMinimal:hover,
-#viewRegular:hover,
-#viewFull:hover {
+#tagOption:hover {
   background: #5E81AC; }
 
 .displayMenu {
@@ -117,27 +143,16 @@ ul {
   background: #3b4252; }
 
 .showMenu {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: auto;
   padding-left: 10px;
   background: #3b4252;
   color: #ECEFF4; }
 
 .showMenu:hover {
   cursor: default; }
-
-.showMenu:hover #showAll,
-.showMenu:hover #showCompleted,
-.showMenu:hover #showUncompleted,
-.showMenu:hover #tagOption,
-.showMenu:hover #viewMinimal,
-.showMenu:hover #viewRegular,
-.showMenu:hover #viewFull {
-  color: #ECEFF4;
-  display: block; }
-
-.showMenu:hover #tagName,
-.showMenu:hover #tagLabel,
-.showMenu:hover #tagFilter {
-  display: inline; }
 
 .Tasks {
   display: flex;
@@ -188,12 +203,14 @@ em {
 
 .logOut {
   margin: 0px 10px 0px auto;
+  padding: 10px;
   display: flex;
   align-items: center; }
 
 .logOutButton {
   padding: 5px;
-  border-radius: 3px; }
+  border-radius: 3px;
+  transition: all 1s ease-out; }
 
 .logOutButton:hover {
   background: #5E81AC;
