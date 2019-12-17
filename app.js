@@ -36,6 +36,7 @@ var userSchema = mongoose.Schema({
   user_id: String,
   display: String,
   view: String,
+  show: String,
   task_list: [
     {
       body: String,
@@ -169,12 +170,14 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
     var taskList = taskUser.task_list;
     var display = taskUser.display;
     var view = taskUser.view;
+    var show = taskUser.show;
     var tagList = [];
     if (!taskUser) {
       // if user is null the user needs to be created
       taskList = [];
       display = "ascending";
       view = "full";
+      show = "all";
       console.log("created");
       User.create({ user_id: userProfile.user_id, task_list: [] }, function(
         err,
@@ -205,7 +208,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       taskList: taskList,
       tagList: tagList,
       display: display,
-      view: view
+      view: view,
+      show: show
     });
   });
 });
@@ -265,6 +269,7 @@ app.get("/showAll", secured, (req, res, next) => {
     for (const task in newList) {
       newList[task].show = true;
     }
+    taskUser.show = "all";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
@@ -290,6 +295,7 @@ app.get("/showUncompleted", secured, (req, res, next) => {
         newList[task].show = false;
       }
     }
+    taskUser.show = "uncompleted";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
@@ -315,6 +321,7 @@ app.get("/showCompleted", secured, (req, res, next) => {
         newList[task].show = false;
       }
     }
+    taskUser.show = "completed";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
@@ -330,20 +337,11 @@ app.get("/orderToggle", secured, (req, res, next) => {
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
     if (err) return console.log(err);
     console.log(taskUser.task_list); //DB
-    // Reverse the order of the task list
-    let newList = [];
-    for (let task = taskUser.task_list.length - 1; task >= 0; task--) {
-      if (taskUser.task_list[task]) {
-        newList.push(taskUser.task_list[task]);
-      }
-    }
-    // Toggle display property
     if (taskUser.display == "ascending") {
       taskUser.display = "descending";
     } else {
       taskUser.display = "ascending";
     }
-    taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);
     });
@@ -361,10 +359,16 @@ app.post("/done", upload.none(), secured, (req, res, next) => {
     let newList = taskUser.task_list;
     for (let i = 0; i < newList.length; i++) {
       if (newList[i]._id == req.body.taskId) {
-        console.log("marking done");
-        newList[i].done = true;
-        newList[i].show = false;
-        newList[i].dateCompleted = new Date().toDateString();
+        // check if done and toggle
+        if (newList[i].done) {
+          newList[i].done = false;
+        } else {
+          newList[i].done = true;
+          newList[i].dateCompleted = new Date().toDateString();
+        }
+        if (taskUser.show == "uncompleted") {
+          newList[i].show = false;
+        }
         console.log(newList[i]); //DB
       }
     }
@@ -461,12 +465,7 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
     };
     let newList = taskUser.task_list;
     // Update and save user's task list
-    // check display order so it is added at proper place
-    if (taskUser.display == "ascending") {
-      newList.unshift(task);
-    } else {
-      newList.push(task);
-    }
+    newList.push(task);
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return console.log(err);

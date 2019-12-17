@@ -9,14 +9,30 @@ block layout-content
         nav.displayMenu
           ul.showMenu Show
             li 
-              form(id="showAll" action="/showAll" name="showAll" method="get")
-                input(name="showAll" id="showAll" type="submit" value="All")
+              div#showAll
+                form(action="/showAll" name="showAll" method="get")
+                  input(name="showAll" type="submit" value=show == "all" ? "All ✓" : "All" )
             li 
-              form(id="showCompleted" action="/showCompleted" name="showCompleted" method="get")
-                  input(name="showCompleted" id="showCompleted" type="submit" value="Complete")
+              div#showCompleted
+                form(action="/showCompleted" name="showCompleted" method="get")
+                    input(name="showCompleted" type="submit" value=show == "completed" ? "Completed ✓" : "Completed" )
             li 
-              form(id="showUncompleted" action="/showUncompleted" name="showUncompleted" method="get")
-                input(name="showUncompleted" id="showUncompleted" type="submit" value="Incomplete")
+              div#showUncompleted
+                form(action="/showUncompleted" name="showUncompleted" method="get")
+                  input(name="showUncompleted" type="submit" value=show == "uncompleted" ? "Incomplete ✓" : "Incomplete")
+          ul.showMenu View
+            li 
+              div#viewMinimal
+                form(action="/viewMinimal" name="viewMinimal" method="get")
+                  input(name="viewMinimal" type="submit" value=view == "minimal" ? "Minimal ✓" : "Minimal")
+            li
+              div#viewRegular
+                form(action="/viewRegular" name="viewRegular" method="get")
+                  input(name="viewRegular" type="submit" value=view == "regular" ? "Regular ✓" : "Regular")
+            li
+              div#viewFull
+                form(action="/viewFull" name="viewFull" method="get")
+                  input(name="viewFull" type="submit" value=view == "full" ? "Full ✓" : "Full")
           ul.showMenu(id="tagList") Tags
             form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
               each tag in tagList
@@ -24,22 +40,20 @@ block layout-content
                   input(type="checkbox" value=tag id="tagName" name="tagNames")
                   label(for=tag id="tagLabel") #{tag}
               input(id="tagFilter" type="submit" name="submit" value="filter")
-          ul.showMenu View
-            li 
-              form(id="viewMinimal" action="/viewMinimal" name="viewMinimal" method="get")
-                input(name="viewMinimal" id="viewMinimal" type="submit" value=view == "minimal" ? "Minimal ✓" : "Minimal")
-              form(id="viewRegular" action="/viewRegular" name="viewRegular" method="get")
-                input(name="viewRegular" id="viewRegular" type="submit" value=view == "regular" ? "Regular ✓" : "Regular")
-              form(id="viewFull" action="/viewFull" name="viewFull" method="get")
-                input(name="viewFull" id="viewFull" type="submit" value=view == "full" ? "Full ✓" : "Full")
-          form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
-            input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")
           div.logOut
+            form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
+              input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")
             a(href="/logout")
               div.logOutButton Log Out
  
     div.Tasks
-      each task in taskList
+      - 
+        if(display === "ascending")
+          var listArr = taskList.reverse()
+        else
+          var listArr = taskList
+      
+      each task in listArr
         if(task.show)
           div.Task
             div.taskBody
@@ -56,10 +70,6 @@ block layout-content
                   input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
               div.taskItem
                 strong= task.body
-            if(view !== "minimal")
-              if(task.description)
-                  div.taskItem
-                    div= task.description 
               div.taskEdit
                 if(task.edit)
                   form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
@@ -69,6 +79,10 @@ block layout-content
                     input(type="date" name="dueDate" value=task.dueDate)
                     input(type="hidden" name="taskId" id="taskId" value=task._id)
                     input(type="submit" name="submit" value="✓")
+            if(view !== "minimal")
+              if(task.description)
+                  div.taskItem
+                    div= task.description 
             if(view !== "minimal" && view !== "regular")
               div.taskInfo
                 if(task.tags.length > 0)
