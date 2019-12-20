@@ -72,10 +72,10 @@ block layout-content
                 strong= task.body
               div.taskEdit
                 if(task.edit)
-                  form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
+                 form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")
                     input(type="text" name="body" required="true" value=task.body placeholder=task.body)
                     input(type="text" name="description" value=task.description placeholder=task.description)
-                    input(type="text" name="tags" placeholder=task.tags)
+                    input(type="text" name="tags" value=task.tags.toString())
                     input(type="date" name="dueDate" value=task.dueDate)
                     input(type="hidden" name="taskId" id="taskId" value=task._id)
                     input(type="submit" name="submit" value="✓")

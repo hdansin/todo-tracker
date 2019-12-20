@@ -97,7 +97,8 @@ ul {
   height: 30px;
   opacity: 1; }
 
-.showMenu:hover #tagOption {
+.showMenu:hover #tagOption,
+.showMenu:hover #tagFilter {
   height: 30px;
   opacity: 1; }
 
@@ -131,6 +132,11 @@ ul {
   opacity: 0;
   transition: all 0.5s ease-out; }
 
+#tagFilter {
+  height: 0px;
+  opacity: 0;
+  transition: all 0.5s ease-out; }
+
 #tagOption:hover {
   background: #5E81AC; }
 
@@ -160,8 +166,6 @@ ul {
   align-items: flex-start;
   justify-content: start;
   flex-wrap: wrap;
-  max-height: 75vh;
-  width: 100%;
   padding: 5px;
   margin: 20px 0px 20px 0px; }
 
