@@ -13,7 +13,6 @@ const querystring = require("querystring");
 
 require("dotenv").config();
 
-
 /**
  * Routes Definitions
  */
@@ -35,8 +34,9 @@ router.get("/callback", (req, res, next) => {
     }
     if (!user) {
       return res.redirect("/login");
+      console.log("not user");
     }
-    req.logIn(user, (err) => {
+    req.logIn(user, err => {
       if (err) {
         return next(err);
       }
@@ -71,7 +71,6 @@ router.get("/logout", (req, res) => {
 
   res.redirect(logoutURL);
 });
-
 
 /**
  * Module Exports
