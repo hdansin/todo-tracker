@@ -6,6 +6,9 @@
 
 const express = require("express");
 const path = require("path");
+var debug = require("debug")("app");
+var compression = require("compression");
+var helmet = require("helmet");
 
 // Auth0
 const expressSession = require("express-session");
@@ -23,13 +26,13 @@ mongoose
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
-  .catch(error => console.error(error));
+  .catch(error => debug(error));
 
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+db.on("error", debug.bind(console, "connection error:"));
 db.once("open", function() {
   // we're connected!
-  console.log("Connected!");
+  debug("Connected!");
 });
 
 var userSchema = mongoose.Schema({
@@ -111,6 +114,9 @@ const strategy = new Auth0Strategy(
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
+app.use(compression()); // Compress all routes
+app.use(helmet());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(expressSession(session));
@@ -182,7 +188,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
         err,
         result
       ) {
-        if (err) return console.error(err);
+        if (err) return debug(err);
       });
     } else {
       // check if user has tags in taskList and create a list of them
@@ -216,11 +222,11 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
 app.get("/viewFull", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Update user's 'view' property to 'minimal'
     taskUser.view = "full";
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -230,11 +236,11 @@ app.get("/viewFull", secured, (req, res, next) => {
 app.get("/viewRegular", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Update user's 'view' property to 'minimal'
     taskUser.view = "regular";
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -244,11 +250,11 @@ app.get("/viewRegular", secured, (req, res, next) => {
 app.get("/viewMinimal", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Update user's 'view' property to 'minimal'
     taskUser.view = "minimal";
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -258,7 +264,7 @@ app.get("/viewMinimal", secured, (req, res, next) => {
 app.get("/showAll", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Mark all task's show property to true
     let newList = taskUser.task_list;
     for (const task in newList) {
@@ -267,7 +273,7 @@ app.get("/showAll", secured, (req, res, next) => {
     taskUser.show = "all";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -277,7 +283,7 @@ app.get("/showAll", secured, (req, res, next) => {
 app.get("/showUncompleted", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Look for tasks with .done = false and mark .show = true
     // and mark .show = false otherwise
     let newList = taskUser.task_list;
@@ -291,7 +297,7 @@ app.get("/showUncompleted", secured, (req, res, next) => {
     taskUser.show = "uncompleted";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -301,7 +307,7 @@ app.get("/showUncompleted", secured, (req, res, next) => {
 app.get("/showCompleted", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Look for tasks with .done = true and mark .show = true
     // and mark .show = false otherwise
     let newList = taskUser.task_list;
@@ -315,7 +321,7 @@ app.get("/showCompleted", secured, (req, res, next) => {
     taskUser.show = "completed";
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -325,14 +331,14 @@ app.get("/showCompleted", secured, (req, res, next) => {
 app.get("/orderToggle", secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     if (taskUser.display == "ascending") {
       taskUser.display = "descending";
     } else {
       taskUser.display = "ascending";
     }
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -342,7 +348,7 @@ app.get("/orderToggle", secured, (req, res, next) => {
 app.post("/done", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     let newList = taskUser.task_list;
     for (let i = 0; i < newList.length; i++) {
       if (newList[i]._id == req.body.taskId) {
@@ -360,7 +366,7 @@ app.post("/done", upload.none(), secured, (req, res, next) => {
     }
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -384,7 +390,7 @@ app.post("/tagSort", upload.none(), secured, (req, res, next) => {
   const sortList = makeSortList();
 
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     let newList = taskUser.task_list;
     // look for tasks with the tags and mark their "show" property
     for (const task in newList) {
@@ -402,7 +408,7 @@ app.post("/tagSort", upload.none(), secured, (req, res, next) => {
     }
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -431,7 +437,7 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
   };
 
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Make new task
     let today = new Date();
     let tags = tagParse();
@@ -450,7 +456,7 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
     newList.push(task);
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("user");
@@ -460,7 +466,7 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
 app.post("/showEditForm", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Find task by taskId and mark task.edit = true
     let newList = taskUser.task_list;
     for (const task in newList) {
@@ -470,7 +476,7 @@ app.post("/showEditForm", upload.none(), secured, (req, res, next) => {
     }
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("/user");
@@ -497,7 +503,7 @@ app.post("/editTask", upload.none(), secured, (req, res, next) => {
   };
 
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Find task by Id
     let newList = taskUser.task_list;
     let tags = [];
@@ -519,7 +525,7 @@ app.post("/editTask", upload.none(), secured, (req, res, next) => {
     // Update and save user's task list
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("user");
@@ -530,7 +536,7 @@ app.post("/deleteTask", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
 
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    if (err) return console.error(err);
+    if (err) return debug(err);
     // Find task by Id
     let newList = taskUser.task_list;
     for (const task in newList) {
@@ -541,7 +547,7 @@ app.post("/deleteTask", upload.none(), secured, (req, res, next) => {
     // Update and save user's task list
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
-      if (err) return console.error(err);
+      if (err) return debug(err);
     });
   }).then(function() {
     res.redirect("user");
@@ -553,5 +559,5 @@ app.post("/deleteTask", upload.none(), secured, (req, res, next) => {
  */
 
 app.listen(port, () => {
-  console.log(`Listening to requests on http://localhost:${port}`);
+  debug(`Listening to requests on http://localhost:${port}`);
 });
