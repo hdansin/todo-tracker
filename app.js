@@ -4,18 +4,19 @@
  * Required External Modules
  */
 
-const express = require("express");
-const path = require("path");
+var express = require("express");
+var path = require("path");
 var debug = require("debug")("app");
 var compression = require("compression");
 var helmet = require("helmet");
 
 // Auth0
-const expressSession = require("express-session");
-const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
+var expressSession = require("express-session");
+var passport = require("passport");
+var Auth0Strategy = require("passport-auth0");
+var dotenv = require("dotenv");
 
-require("dotenv").config(); // Load the environment variables
+dotenv.config(); // Load the environment variables
 
 const authRouter = require("./auth");
 
@@ -92,8 +93,7 @@ var strategy = new Auth0Strategy(
     domain: process.env.AUTH0_DOMAIN,
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
+    callbackURL: process.env.AUTH0_CALLBACK_URL || "://localhost:3000/callback"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     /**
