@@ -33,7 +33,7 @@ router.get("/callback", (req, res, next) => {
       return next(err);
     }
     if (!user) {
-      return res.redirect("/");
+      return res.redirect("/login");
     }
     req.logIn(user, err => {
       if (err) {
@@ -41,7 +41,7 @@ router.get("/callback", (req, res, next) => {
       }
       const returnTo = req.session.returnTo;
       delete req.session.returnTo;
-      res.redirect(returnTo || "/");
+      res.redirect(returnTo || "/user");
     });
   })(req, res, next);
 });
