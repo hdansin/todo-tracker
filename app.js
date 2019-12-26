@@ -151,7 +151,7 @@ const secured = (req, res, next) => {
     return next();
   }
   req.session.returnTo = req.originalUrl;
-  res.redirect("/");
+  res.redirect("/login");
 };
 
 // Defined routes
