@@ -18,7 +18,7 @@ var dotenv = require("dotenv");
 
 dotenv.config(); // Load the environment variables
 
-const authRouter = require("./auth");
+var authRouter = require("./auth");
 
 // Mongoose/Mongo
 var mongoose = require("mongoose");
@@ -93,7 +93,8 @@ var strategy = new Auth0Strategy(
     domain: process.env.AUTH0_DOMAIN,
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
-    callbackURL: process.env.AUTH0_CALLBACK_URL || "://localhost:3000/callback"
+    callbackURL:
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     /**
