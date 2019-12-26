@@ -64,14 +64,14 @@ var upload = multer();
  * App Variables
  */
 
-const app = express();
-const port = process.env.PORT || "8000";
+var app = express();
+var port = process.env.PORT || "8000";
 
 /**
  * Session Configuration
  */
 
-const session = {
+var session = {
   secret: "LoxodontaElephasMammuthusPalaeoloxodonPrimelephas",
   cookie: {},
   resave: false,
@@ -87,7 +87,7 @@ if (app.get("env") === "production") {
  * Passport Configuration
  */
 
-const strategy = new Auth0Strategy(
+var strategy = new Auth0Strategy(
   {
     domain: process.env.AUTH0_DOMAIN,
     clientID: process.env.AUTH0_CLIENT_ID,
@@ -146,7 +146,7 @@ app.use("/", authRouter);
  * Routes Definitions
  */
 
-const secured = (req, res, next) => {
+var secured = (req, res, next) => {
   if (req.user) {
     return next();
   }
