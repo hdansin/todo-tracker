@@ -114,7 +114,6 @@ const strategy = new Auth0Strategy(
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
-app.set("trustproxy", 1);
 app.use(compression()); // Compress all routes
 app.use(helmet());
 
@@ -152,7 +151,7 @@ const secured = (req, res, next) => {
     return next();
   }
   req.session.returnTo = req.originalUrl;
-  res.redirect("/login");
+  res.redirect("/");
 };
 
 // Defined routes
