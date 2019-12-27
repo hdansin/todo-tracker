@@ -95,7 +95,7 @@ var strategy = new Auth0Strategy(
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:5000/callback"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     /**
@@ -196,7 +196,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
         }
       );
     } else {
-      taskList = taskUser.taskList;
+      taskList = taskUser.task_list;
       display = taskUser.display;
       view = taskUser.view;
       show = taskUser.show;
