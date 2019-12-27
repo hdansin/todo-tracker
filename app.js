@@ -81,6 +81,7 @@ var session = {
 
 if (app.get("env") === "production") {
   // Serve secure cookies, requires HTTPS
+  app.set("trust proxy", 1);
   session.cookie.secure = true;
 }
 
@@ -120,7 +121,7 @@ app.use(helmet());
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(expressSession(session));
+app.use(session(session));
 
 passport.use(strategy);
 app.use(passport.initialize());
