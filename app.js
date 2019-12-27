@@ -175,14 +175,16 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
 
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    var taskList = taskUser.task_list;
+    var taskList = [];
+    if (taskUser) {
+      taskList = taskUser.taskList;
+    }
     var display = taskUser.display;
     var view = taskUser.view;
     var show = taskUser.show;
     var tagList = [];
     if (!taskUser) {
       // if user is null the user needs to be created
-      taskList = [];
       display = "ascending";
       view = "full";
       show = "all";
