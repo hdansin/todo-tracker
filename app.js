@@ -175,26 +175,32 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
 
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    // initialize defaults
     var taskList = [];
-    if (taskUser) {
-      taskList = taskUser.taskList;
-    }
-    var display = taskUser.display;
-    var view = taskUser.view;
-    var show = taskUser.show;
     var tagList = [];
+    var display = "ascending";
+    var view = "full";
+    var show = "completed";
+
     if (!taskUser) {
-      // if user is null the user needs to be created
-      display = "ascending";
-      view = "full";
-      show = "all";
-      User.create({ user_id: userProfile.user_id, task_list: [] }, function(
-        err,
-        result
-      ) {
-        if (err) return debug(err);
-      });
+      User.create(
+        {
+          user_id: userProfile.user_id,
+          task_list: [],
+          display: "ascending",
+          view: "full",
+          show: "completed"
+        },
+        function(err, result) {
+          if (err) return debug(err);
+        }
+      );
     } else {
+      taskList = taskUser.taskList;
+      display = taskUser.display;
+      view = taskUser.view;
+      show = taskUser.show;
+
       // check if user has tags in taskList and create a list of them
       for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].tags.length > 0) {
