@@ -200,8 +200,10 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       display = taskUser.display;
       view = taskUser.view;
       show = taskUser.show;
-
       // check if user has tags in taskList and create a list of them
+      if (!taskList) {
+        taskList = [];
+      }
       for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].tags.length > 0) {
           for (let j = 0; j < taskList[i].tags.length; j++) {
