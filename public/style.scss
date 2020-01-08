@@ -79,12 +79,15 @@ ul {
   padding-left: 5px;
 }
 
+//hide buttons at start
 #showUncompleted,
 #showAll,
 #showCompleted,
 #viewMinimal,
 #viewRegular,
-#viewFull {
+#viewFull,
+#sortByDateCompleted,
+#sortByDueDate {
   height: 0px;
   opacity: 0;
   border-radius: 3px;
@@ -99,6 +102,8 @@ ul {
 #showCompleted input[type="submit"],
 #viewMinimal input[type="submit"],
 #viewRegular input[type="submit"],
+#sortByDueDate input[type="submit"],
+#sortByDateCompleted input[type="submit"],
 #viewFull input[type="submit"] {
   background: none;
   transition: all 1s ease-out;
@@ -109,6 +114,8 @@ ul {
 #showCompleted input[type="submit"]:hover,
 #viewMinimal input[type="submit"]:hover,
 #viewRegular input[type="submit"]:hover,
+#sortByDueDate input[type="submit"]:hover,
+#sortByDateCompleted input[type="submit"]:hover,
 #viewFull input[type="submit"]:hover {
   background: $link;
 }
@@ -119,6 +126,8 @@ ul {
 .showMenu:hover #showUncompleted, 
 .showMenu:hover #viewMinimal,
 .showMenu:hover #viewRegular,
+.showMenu:hover #sortByDueDate,
+.showMenu:hover #sortByDateCompleted,
 .showMenu:hover #viewFull {
   height: 30px;
   opacity: 1;

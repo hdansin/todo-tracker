@@ -40,6 +40,16 @@ block layout-content
                   input(type="checkbox" value=tag id="tagName" name="tagNames")
                   label(for=tag id="tagLabel") #{tag}
               input(id="tagFilter" type="submit" name="submit" value="filter")
+          ul.showMenu(id="sortBy") Sort By
+            li
+              div#sortByDueDate
+                form(action="/sortByDueDate" name="sortByDueDate" method="get")
+                  input(name="sortByDueDate" type="submit" value="Due Date")
+            li
+              div#sortByDateCompleted
+                form(action="/sortByDateCompleted" name="sortByDateCompleted" method="get")
+                  input(name="sortByDateCompleted" type="submit" value="Date Completed")
+
           div.logOut
             form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
               input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")

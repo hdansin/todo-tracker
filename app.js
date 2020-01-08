@@ -345,6 +345,52 @@ app.get("/orderToggle", secured, (req, res, next) => {
   });
 });
 
+app.get("/sortByDateCompleted", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return debug(err);
+    let newList = taskUser.task_list;
+    taskUser.task_list = newList.sort(function(a, b) {
+      // Deal with tasks that have not been completed
+      // by catching nulls
+      if (!a.dateCompleted) {
+        return 1;
+      }
+      if (!b.dateCompleted) {
+        return -1;
+      }
+      a = new Date(a.dateCompleted);
+      b = new Date(b.dateCompleted);
+      return a - b;
+    });
+    debug(newList);
+    taskUser.save(function(err) {
+      if (err) return debug(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
+app.get("/sortByDueDate", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return debug(err);
+    let newList = taskUser.task_list;
+    taskUser.task_list = newList.sort(function(a, b) {
+      a = new Date(a.dueDate);
+      b = new Date(b.dueDate);
+      return b - a;
+    });
+    debug(newList);
+    taskUser.save(function(err) {
+      if (err) return debug(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
 app.post("/done", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
