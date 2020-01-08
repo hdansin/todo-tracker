@@ -1,2 +1,1 @@
-web: npm run dev
-web: npm run ui
+web: npm run start
