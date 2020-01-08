@@ -4,20 +4,21 @@
  * Required External Modules
  */
 
-const express = require("express");
-const path = require("path");
+var express = require("express");
+var path = require("path");
 var debug = require("debug")("app");
 var compression = require("compression");
 var helmet = require("helmet");
 
 // Auth0
-const expressSession = require("express-session");
-const passport = require("passport");
-const Auth0Strategy = require("passport-auth0");
+var expressSession = require("express-session");
+var passport = require("passport");
+var Auth0Strategy = require("passport-auth0");
+var dotenv = require("dotenv");
 
-require("dotenv").config(); // Load the environment variables
+dotenv.config(); // Load the environment variables
 
-const authRouter = require("./auth");
+var authRouter = require("./auth");
 
 // Mongoose/Mongo
 var mongoose = require("mongoose");
@@ -64,14 +65,14 @@ var upload = multer();
  * App Variables
  */
 
-const app = express();
-const port = process.env.PORT || "8000";
+var app = express();
+var port = process.env.PORT || "8000";
 
 /**
  * Session Configuration
  */
 
-const session = {
+var session = {
   secret: "LoxodontaElephasMammuthusPalaeoloxodonPrimelephas",
   cookie: {},
   resave: false,
@@ -80,6 +81,7 @@ const session = {
 
 if (app.get("env") === "production") {
   // Serve secure cookies, requires HTTPS
+  app.set("trust proxy", 1);
   session.cookie.secure = true;
 }
 
@@ -87,13 +89,13 @@ if (app.get("env") === "production") {
  * Passport Configuration
  */
 
-const strategy = new Auth0Strategy(
+var strategy = new Auth0Strategy(
   {
     domain: process.env.AUTH0_DOMAIN,
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL || "http://localhost:3000/callback"
+      process.env.AUTH0_CALLBACK_URL || "http://localhost:5000/callback"
   },
   function(accessToken, refreshToken, extraParams, profile, done) {
     /**
@@ -146,7 +148,7 @@ app.use("/", authRouter);
  * Routes Definitions
  */
 
-const secured = (req, res, next) => {
+var secured = (req, res, next) => {
   if (req.user) {
     return next();
   }
@@ -173,25 +175,35 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
 
   // check if user is in db and add new user if not
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
-    var taskList = taskUser.task_list;
-    var display = taskUser.display;
-    var view = taskUser.view;
-    var show = taskUser.show;
+    // initialize defaults
+    var taskList = [];
     var tagList = [];
+    var display = "ascending";
+    var view = "full";
+    var show = "completed";
+
     if (!taskUser) {
-      // if user is null the user needs to be created
-      taskList = [];
-      display = "ascending";
-      view = "full";
-      show = "all";
-      User.create({ user_id: userProfile.user_id, task_list: [] }, function(
-        err,
-        result
-      ) {
-        if (err) return debug(err);
-      });
+      User.create(
+        {
+          user_id: userProfile.user_id,
+          task_list: [],
+          display: "ascending",
+          view: "full",
+          show: "completed"
+        },
+        function(err, result) {
+          if (err) return debug(err);
+        }
+      );
     } else {
+      taskList = taskUser.task_list;
+      display = taskUser.display;
+      view = taskUser.view;
+      show = taskUser.show;
       // check if user has tags in taskList and create a list of them
+      if (!taskList) {
+        taskList = [];
+      }
       for (let i = 0; i < taskList.length; i++) {
         if (taskList[i].tags.length > 0) {
           for (let j = 0; j < taskList[i].tags.length; j++) {
