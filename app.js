@@ -41,6 +41,7 @@ var userSchema = mongoose.Schema({
   display: String,
   view: String,
   show: String,
+  sort: String,
   task_list: [
     {
       body: String,
@@ -180,7 +181,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
     var tagList = [];
     var display = "ascending";
     var view = "full";
-    var show = "completed";
+    var show = "all";
+    var sort = "";
 
     if (!taskUser) {
       User.create(
@@ -189,7 +191,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
           task_list: [],
           display: "ascending",
           view: "full",
-          show: "completed"
+          show: "all",
+          sort: ""
         },
         function(err, result) {
           if (err) return debug(err);
@@ -200,6 +203,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       display = taskUser.display;
       view = taskUser.view;
       show = taskUser.show;
+      sort = taskUser.sort;
       // check if user has tags in taskList and create a list of them
       if (!taskList) {
         taskList = [];
@@ -226,7 +230,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       tagList: tagList,
       display: display,
       view: view,
-      show: show
+      show: show,
+      sort: sort
     });
   });
 });
@@ -376,6 +381,7 @@ app.get("/sortByDateCompleted", upload.none(), secured, (req, res, next) => {
       return a - b;
     });
     debug(newList);
+    taskUser.sort = "dateCompleted";
     taskUser.save(function(err) {
       if (err) return debug(err);
     });
@@ -390,11 +396,19 @@ app.get("/sortByDueDate", upload.none(), secured, (req, res, next) => {
     if (err) return debug(err);
     let newList = taskUser.task_list;
     taskUser.task_list = newList.sort(function(a, b) {
+      // Put incomplete tasks without a due date at bottom
+      if (!a.dueDate) {
+        return -1;
+      }
+      if (!b.dueDate) {
+        return 1;
+      }
       a = new Date(a.dueDate);
       b = new Date(b.dueDate);
-      return b - a;
+      return a - b;
     });
     debug(newList);
+    taskUser.sort = "dueDate";
     taskUser.save(function(err) {
       if (err) return debug(err);
     });

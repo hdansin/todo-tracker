@@ -44,11 +44,11 @@ block layout-content
             li
               div#sortByDueDate
                 form(action="/sortByDueDate" name="sortByDueDate" method="get")
-                  input(name="sortByDueDate" type="submit" value="Due Date")
+                  input(name="sortByDueDate" type="submit"  value=sort ? sort == "dueDate" ? "Due Date ✓" : "Due Date" : "Due Date")
             li
               div#sortByDateCompleted
                 form(action="/sortByDateCompleted" name="sortByDateCompleted" method="get")
-                  input(name="sortByDateCompleted" type="submit" value="Date Completed")
+                  input(name="sortByDateCompleted" type="submit" value=sort ? sort == "dateCompleted" ? "Date Completed ✓" : "Date Completed" : "Date Completed")
 
           div.logOut
             form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
@@ -97,7 +97,8 @@ block layout-content
               div.taskInfo
                 if(task.tags.length > 0)
                   div.taskItem
-                    div#tags= task.tags
+                    div#tags
+                      em= task.tags
                 if(task.dueDate)
                   div.taskItem
                     div.taskDate
