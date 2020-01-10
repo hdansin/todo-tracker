@@ -492,7 +492,6 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
 
   let tagParse = function() {
     var tagArr = [];
-
     if (req.body.tags) {
       let newTag = "";
       for (let i = 0; i < req.body.tags.length; i++) {
@@ -506,6 +505,38 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
       tagArr.push(newTag); // to push last tag
     }
     return tagArr;
+  };
+
+  let sortByDueDate = function(listArr) {
+    listArr.sort(function(a, b) {
+      if (!a.dueDate) {
+        return -1;
+      }
+      if (!b.dueDate) {
+        return 1;
+      }
+      a = new Date(a.dueDate);
+      b = new Date(b.dueDate);
+      return a - b;
+    });
+    return listArr;
+  };
+
+  let sortByDateCompleted = function(listArr) {
+    listArr.sort(function(a, b) {
+      // Deal with tasks that have not been completed
+      // by catching nulls
+      if (!a.dateCompleted) {
+        return 1;
+      }
+      if (!b.dateCompleted) {
+        return -1;
+      }
+      a = new Date(a.dateCompleted);
+      b = new Date(b.dateCompleted);
+      return a - b;
+    });
+    return listArr;
   };
 
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
@@ -524,8 +555,15 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
       edit: false
     };
     let newList = taskUser.task_list;
-    // Update and save user's task list
     newList.push(task);
+    // Update and save user's task list
+    // Make it respect user's sort settings
+    if (taskUser.sort == "dueDate") {
+      newList = sortByDueDate(newList);
+    } else if (taskUser.sort == "dateCompleted") {
+      newList = sortByDateCompleted(newList);
+    }
+
     taskUser.task_list = newList;
     taskUser.save(function(err, result) {
       if (err) return debug(err);
