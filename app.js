@@ -42,6 +42,7 @@ var userSchema = mongoose.Schema({
   view: String,
   show: String,
   sort: String,
+  theme: String,
   task_list: [
     {
       body: String,
@@ -183,6 +184,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
     var view = "full";
     var show = "all";
     var sort = "";
+    var theme = "light";
 
     if (!taskUser) {
       User.create(
@@ -192,7 +194,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
           display: "ascending",
           view: "full",
           show: "all",
-          sort: ""
+          sort: "",
+          theme: "light"
         },
         function(err, result) {
           if (err) return debug(err);
@@ -204,6 +207,7 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       view = taskUser.view;
       show = taskUser.show;
       sort = taskUser.sort;
+      theme = taskUser.theme;
       // check if user has tags in taskList and create a list of them
       if (!taskList) {
         taskList = [];
@@ -231,7 +235,8 @@ app.get("/user", upload.none(), secured, (req, res, next) => {
       display: display,
       view: view,
       show: show,
-      sort: sort
+      sort: sort,
+      theme: theme
     });
   });
 });
@@ -417,6 +422,24 @@ app.get("/sortByDueDate", upload.none(), secured, (req, res, next) => {
   });
 });
 
+app.get("/changeTheme", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return debug(err);
+    if (taskUser.theme == "dark") {
+      taskUser.theme = "light";
+    } else {
+      taskUser.theme = "dark";
+    }
+    debug(taskUser.theme);
+    taskUser.save(function(err) {
+      if (err) return debug(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
 app.post("/done", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
@@ -466,13 +489,18 @@ app.post("/tagSort", upload.none(), secured, (req, res, next) => {
     let newList = taskUser.task_list;
     // look for tasks with the tags and mark their "show" property
     for (const task in newList) {
-      // start by hiding all, then show ones that don't match
-      newList[task].show = false;
-      for (const tag in newList[task].tags) {
-        if (newList[task].tags[tag]) {
-          for (const sortItem in sortList) {
-            if (sortList[sortItem].trim() === newList[task].tags[tag].trim()) {
-              newList[task].show = true;
+      // Start by hiding all, then show ones that don't match
+      // Respect user's view settings
+      if (newList[task].show) {
+        newList[task].show = false;
+        for (const tag in newList[task].tags) {
+          if (newList[task].tags[tag]) {
+            for (const sortItem in sortList) {
+              if (
+                sortList[sortItem].trim() === newList[task].tags[tag].trim()
+              ) {
+                newList[task].show = true;
+              }
             }
           }
         }
@@ -555,6 +583,83 @@ app.post("/newTask", upload.none(), secured, (req, res, next) => {
       edit: false
     };
     let newList = taskUser.task_list;
+    newList.push(task);
+    // Update and save user's task list
+    // Make it respect user's sort settings
+    if (taskUser.sort == "dueDate") {
+      newList = sortByDueDate(newList);
+    } else if (taskUser.sort == "dateCompleted") {
+      newList = sortByDateCompleted(newList);
+    }
+
+    taskUser.task_list = newList;
+    taskUser.save(function(err, result) {
+      if (err) return debug(err);
+    });
+  }).then(function() {
+    res.redirect("user");
+  });
+});
+
+app.post("/duplicateTask", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  let sortByDueDate = function(listArr) {
+    listArr.sort(function(a, b) {
+      if (!a.dueDate) {
+        return -1;
+      }
+      if (!b.dueDate) {
+        return 1;
+      }
+      a = new Date(a.dueDate);
+      b = new Date(b.dueDate);
+      return a - b;
+    });
+    return listArr;
+  };
+
+  let sortByDateCompleted = function(listArr) {
+    listArr.sort(function(a, b) {
+      // Deal with tasks that have not been completed
+      // by catching nulls
+      if (!a.dateCompleted) {
+        return 1;
+      }
+      if (!b.dateCompleted) {
+        return -1;
+      }
+      a = new Date(a.dateCompleted);
+      b = new Date(b.dateCompleted);
+      return a - b;
+    });
+    return listArr;
+  };
+
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return debug(err);
+    // function that finds a matching task and returns that task
+    var newTask = function(sourceTaskList) {
+      for (const task in sourceTaskList) {
+        if (sourceTaskList[task]._id == req.body.taskId) {
+          // duplicate the task
+          let t = {
+            body: sourceTaskList[task].body,
+            dueDate: sourceTaskList[task].dueDate,
+            dateCreated: sourceTaskList[task],
+            dateCompleted: sourceTaskList[task],
+            description: sourceTaskList[task].description,
+            tags: sourceTaskList[task].tags,
+            done: sourceTaskList[task].done,
+            show: sourceTaskList[task].show,
+            edit: sourceTaskList[task].edit
+          };
+          debug("t: " + t);
+          return t;
+        }
+      }
+    };
+    let newList = taskUser.task_list;
+    let task = newTask(newList);
     newList.push(task);
     // Update and save user's task list
     // Make it respect user's sort settings

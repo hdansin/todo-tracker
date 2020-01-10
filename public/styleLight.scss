@@ -140,19 +140,22 @@ ul {
 }
 
 
-#orderToggle {
+#orderToggle,
+#changeThemeToggle {
   display: flex;
   flex-direction: column;
 }
 
-#orderToggleButton {
+#orderToggleButton,
+#changeThemeButton {
   background: none;
   font-size: 16px;
   padding: 5px;
   transition: all 1s ease-out;
 }
 
-#orderToggleButton:hover {
+#orderToggleButton:hover, 
+#changeThemeButton:hover {
   cursor: pointer;
   background: $link;
 }

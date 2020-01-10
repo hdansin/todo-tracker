@@ -86,6 +86,7 @@ ul {
 #viewMinimal,
 #viewRegular,
 #viewFull,
+#sortByDateCompleted,
 #sortByDueDate {
   height: 0px;
   opacity: 0;
@@ -242,11 +243,16 @@ ul {
 }
 
 #deleteTask,
+#duplicateTask,
 #showEditForm {
   visibility: hidden;
 }
 
 .taskBody:hover #deleteTask {
+  visibility: visible;
+}
+
+.taskBody:hover #duplicateTask {
   visibility: visible;
 }
 

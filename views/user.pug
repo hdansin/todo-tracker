@@ -2,6 +2,11 @@ extends layout
 
 
 block layout-content
+  head
+    if theme == "light"
+      link(rel="stylesheet" href="/styleLight.css")
+    else
+      link(rel="stylesheet" href="/styleDark.css")
   div.View.UserView
     div.Message
       h1 Hi, #{userProfile.nickname}!
@@ -36,11 +41,11 @@ block layout-content
                   input(name="viewFull" type="submit" value=view == "full" ? "Full ✓" : "Full")
           ul.showMenu(id="tagList") Tags
             form(id="sortByTag" action="/tagSort" enctype="multipart/form-data" name="doneTask" method="post")
+              input(id="tagFilter" type="submit" name="submit" value="filter")
               each tag in tagList
                 div#tagOption
                   input(type="checkbox" value=tag id="tagName" name="tagNames")
                   label(for=tag id="tagLabel") #{tag}
-              input(id="tagFilter" type="submit" name="submit" value="filter")
           ul.showMenu(id="sortBy") Sort By
             li
               div#sortByDueDate
@@ -52,8 +57,11 @@ block layout-content
                   input(name="sortByDateCompleted" type="submit" value=sort ? sort == "dateCompleted" ? "Date Completed ✓" : "Date Completed" : "Date Completed")
 
           div.logOut
+            form(id="changeTheme" action="/changeTheme" name="changeTheme" method="get")
+              input(name="changeTheme" title="change theme" id="changeThemeButton" type="submit" value=theme == "light" ? "☾": "☼")
             form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
               input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")
+
             a(href="/logout")
               div.logOutButton Log Out
  
@@ -71,16 +79,22 @@ block layout-content
               div.taskItem
                 form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  input(type="submit" name="submit" value="✗")
+                  input(type="submit" title="delete task" name="submit" value="✗")
+                form(id="duplicateTask" action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
+                  input(id="taskId" name="taskId" type="hidden" value=task._id)
+                  input(type="submit" title="duplicate task" name="submit" value="↻")
                 form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
                   input(type="hidden" name="taskId" id="taskId" value=task._id)
-                  input(type="submit" name="submit" value="✎")
+                  input(type="submit" title="edit task" name="submit" value="✎")
 
                 form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=task._id)
-                  input(type="submit" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
+                  input(type="submit" title="mark done" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
               div.taskItem
-                strong= task.body
+                if task.done
+                  s= task.body
+                else
+                  strong= task.body
               div.taskEdit
                 if(task.edit)
                  form(id="editTask" action="/editTask" enctype="multipart/form-data" name="editTask" method="post")

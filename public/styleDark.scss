@@ -1,7 +1,7 @@
 // Colors from Nord color pallete
-$fg0: #2E3440;
-$fg1: #3b4252;
-$bg0: #ECEFF4;
+$fg0: #ECEFF4;
+$fg1: #E5E9F0;
+$bg0: #2E3440;
 $link: #5E81AC;
 $tags: #a3be8c;
 
@@ -34,6 +34,7 @@ a {
 input[type="text"],
 input[type="date"] {
   background: $bg0;
+  color: $fg1;
   margin: 2px;
   border-bottom: solid 2px $fg0;
   border-top: none;
@@ -139,20 +140,22 @@ ul {
   opacity: 1;
 }
 
-
-#orderToggle {
+#orderToggle,
+#changeThemeToggle {
   display: flex;
   flex-direction: column;
 }
 
-#orderToggleButton {
+#orderToggleButton,
+#changeThemeButton {
   background: none;
   font-size: 16px;
   padding: 5px;
   transition: all 1s ease-out;
 }
 
-#orderToggleButton:hover {
+#orderToggleButton:hover, 
+#changeThemeButton:hover {
   cursor: pointer;
   background: $link;
 }

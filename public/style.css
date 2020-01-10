@@ -195,10 +195,14 @@ ul {
   justify-content: space-between; }
 
 #deleteTask,
+#duplicateTask,
 #showEditForm {
   visibility: hidden; }
 
 .taskBody:hover #deleteTask {
+  visibility: visible; }
+
+.taskBody:hover #duplicateTask {
   visibility: visible; }
 
 .taskBody:hover #showEditForm {
