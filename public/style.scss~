@@ -15,6 +15,7 @@ body,
 #root {
   height: 100%;
   width: 100%;
+  font-family: 'Source Sans Pro', sans-serif;
 }
 
 body {
@@ -81,6 +82,9 @@ input[type="submit"] {
   max-width: 360px;
   background: $fg0;
   color: $bg0;
+  @media (max-width: 739px) {
+    margin-bottom: 55px;
+  }
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
@@ -328,6 +332,15 @@ em {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 739px) {
+    position: fixed;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 30px;
+    left: 0px;
+    right: 0px;
+  }
 
   height: 55px;
   width: 150px;

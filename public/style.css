@@ -59,16 +59,19 @@ input[type="submit"] {
 
 .Feature {
   flex-grow: 1;
-  max-width: 360px;
+  max-width: 350px;
   background: #2E3440;
   color: #ECEFF4;
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
   border: solid 2px #88c0d0; }
+  @media (max-width: 739px) {
+    .Feature {
+      margin-bottom: 55px; } }
 
 .FeatureImg {
-  max-width: 345px;
+  max-width: 335px;
   border-radius: 2px; }
 
 ul {
@@ -273,3 +276,11 @@ em {
   font-weight: bold;
   color: #ECEFF4;
   text-transform: capitalize; }
+  @media (max-width: 739px) {
+    .NavButton {
+      position: fixed;
+      margin-left: auto;
+      margin-right: auto;
+      bottom: 30px;
+      left: 0px;
+      right: 0px; } }
