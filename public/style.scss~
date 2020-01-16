@@ -79,7 +79,7 @@ input[type="submit"] {
 
 .Feature {
   flex-grow: 1;
-  max-width: 360px;
+  max-width: 350px;
   background: $fg0;
   color: $bg0;
   @media (max-width: 739px) {
@@ -92,7 +92,7 @@ input[type="submit"] {
 }
 
 .FeatureImg {
-  max-width: 345px;
+  max-width: 335px;
   border-radius: 2px;
 }
 

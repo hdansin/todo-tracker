@@ -8,11 +8,11 @@ body,
   width: 100%; }
 
 body {
-  background: #2E3440;
-  color: #ECEFF4; }
+  background: #2e3440;
+  color: #eceff4; }
 
 a {
-  color: #5E81AC; }
+  color: #5e81ac; }
 
 #root {
   display: flex;
@@ -20,24 +20,24 @@ a {
 
 input[type="text"],
 input[type="date"] {
-  background: #2E3440;
-  color: #E5E9F0;
+  background: #2e3440;
+  color: #e5e9f0;
   margin: 2px;
-  border-bottom: solid 2px #ECEFF4;
+  border-bottom: solid 2px #eceff4;
   border-top: none;
   border-left: none;
   border-right: none; }
 
 input[type="submit"] {
-  background: #5E81AC;
-  color: #2E3440;
+  background: #5e81ac;
+  color: #2e3440;
   margin: 2px;
   border: none;
   border-radius: 5px; }
 
 .taskItem > form > input[type="submit"] {
   background: none;
-  color: #ECEFF4;
+  color: #eceff4;
   font-size: 16px; }
 
 .View {
@@ -52,7 +52,7 @@ input[type="submit"] {
   align-items: left;
   justify-content: space-between;
   width: 100%;
-  background: #2E3440; }
+  background: #2e3440; }
 
 ul {
   display: flex;
@@ -71,7 +71,7 @@ ul {
   opacity: 0;
   border-radius: 3px;
   background: none;
-  color: #2E3440;
+  color: #2e3440;
   transition: all 0.5s ease-out; }
 
 #showUncompleted input[type="submit"],
@@ -93,7 +93,7 @@ ul {
 #sortByDueDate input[type="submit"]:hover,
 #sortByDateCompleted input[type="submit"]:hover,
 #viewFull input[type="submit"]:hover {
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 .showMenu:hover #showAll,
 .showMenu:hover #showCompleted,
@@ -126,19 +126,19 @@ ul {
 #orderToggleButton:hover,
 #changeThemeButton:hover {
   cursor: pointer;
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 #tagList {
   display: flex;
   max-width: 800px;
   height: auto;
   width: auto;
-  background: #E5E9F0;
-  color: #2E3440; }
+  background: #e5e9f0;
+  color: #2e3440; }
 
 #tagOption {
-  background: #E5E9F0;
-  color: #2E3440;
+  background: #e5e9f0;
+  color: #2e3440;
   border-radius: 3px;
   height: 0px;
   opacity: 0;
@@ -150,7 +150,7 @@ ul {
   transition: all 0.5s ease-out; }
 
 #tagOption:hover {
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 .displayMenu {
   display: flex;
@@ -158,7 +158,7 @@ ul {
   flex-grow: 2;
   margin: 20px 0px 20px 0px;
   border-radius: 5px;
-  background: #E5E9F0; }
+  background: #e5e9f0; }
 
 .showMenu {
   display: flex;
@@ -166,11 +166,38 @@ ul {
   height: auto;
   width: auto;
   padding-left: 10px;
-  background: #E5E9F0;
-  color: #2E3440; }
+  background: #e5e9f0;
+  color: #2e3440; }
 
 .showMenu:hover {
   cursor: default; }
+
+.mobileMenu {
+  color: #2e3440;
+  opacity: 0;
+  transition: all 0.5s ease-in; }
+
+@media (max-width: 750px) {
+  .displayMenu {
+    flex-direction: column;
+    align-items: left;
+    width: 80%; }
+  .showButtons {
+    width: 90%; }
+  .Tasks {
+    align-items: left;
+    justify-content: left;
+    margin: 5px; }
+  .mobileMenu {
+    opacity: 1;
+    margin: 10px;
+    visibility: collapse; }
+  .taskItem {
+    flex-wrap: wrap; }
+  .taskActions {
+    flex-direction: column-reverse; }
+  .taskActions * {
+    visibility: visible; } }
 
 .Tasks {
   display: flex;
@@ -203,12 +230,8 @@ ul {
 #showEditForm {
   visibility: hidden; }
 
-.taskBody:hover #deleteTask {
-  visibility: visible; }
-
-.taskBody:hover #duplicateTask {
-  visibility: visible; }
-
+.taskBody:hover #duplicateTask,
+.taskBody:hover #deleteTask,
 .taskBody:hover #showEditForm {
   visibility: visible; }
 
@@ -216,7 +239,7 @@ ul {
   width: 100%; }
 
 #tags {
-  color: #E5E9F0; }
+  color: #e5e9f0; }
 
 em {
   font-size: 14px; }
@@ -226,6 +249,9 @@ em {
   padding: 10px;
   display: flex;
   align-items: center; }
+  @media (max-width: 750px) {
+    .logOut {
+      margin-left: 20px; } }
 
 .logOutButton {
   padding: 5px;
@@ -233,11 +259,11 @@ em {
   transition: all 1s ease-out; }
 
 .logOutButton:hover {
-  background: #5E81AC;
+  background: #5e81ac;
   cursor: pointer; }
 
 .logOut a {
-  color: #2E3440;
+  color: #2e3440;
   text-decoration: none; }
 
 .NavButtons {
@@ -253,9 +279,9 @@ em {
   align-items: center;
   height: 55px;
   width: 150px;
-  background: #5E81AC;
+  background: #5e81ac;
   border-radius: 30px;
   font-size: 16px;
   font-weight: bold;
-  color: #2E3440;
+  color: #2e3440;
   text-transform: capitalize; }

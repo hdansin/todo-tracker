@@ -1,8 +1,8 @@
 // Colors from Nord color pallete
-$fg0: #2E3440;
+$fg0: #2e3440;
 $fg1: #3b4252;
-$bg0: #ECEFF4;
-$link: #5E81AC;
+$bg0: #eceff4;
+$link: #5e81ac;
 $tags: #a3be8c;
 
 * {
@@ -24,7 +24,6 @@ body {
 a {
   color: $link;
 }
-
 
 #root {
   display: flex;
@@ -48,7 +47,6 @@ input[type="submit"] {
   border: none;
   border-radius: 5px;
 }
-
 
 .taskItem > form > input[type="submit"] {
   background: none;
@@ -123,7 +121,7 @@ ul {
 // show sub-menus on hover
 .showMenu:hover #showAll,
 .showMenu:hover #showCompleted,
-.showMenu:hover #showUncompleted, 
+.showMenu:hover #showUncompleted,
 .showMenu:hover #viewMinimal,
 .showMenu:hover #viewRegular,
 .showMenu:hover #sortByDueDate,
@@ -139,7 +137,6 @@ ul {
   opacity: 1;
 }
 
-
 #orderToggle,
 #changeThemeToggle {
   display: flex;
@@ -154,7 +151,7 @@ ul {
   transition: all 1s ease-out;
 }
 
-#orderToggleButton:hover, 
+#orderToggleButton:hover,
 #changeThemeButton:hover {
   cursor: pointer;
   background: $link;
@@ -213,6 +210,43 @@ ul {
   cursor: default;
 }
 
+// Style nav for small screen
+@media (max-width: 750px) {
+  .displayMenu {
+    flex-direction: column;
+    align-items: left;
+    width: 80%;
+  }
+
+  .showButtons {
+    width: 90%;
+  }
+
+  .Tasks {
+    align-items: left;
+    justify-content: left;
+    margin: 5px;
+  }
+
+  .mobileMenu {
+    opacity: 1;
+    margin: 10px;
+    visibility: collapse;
+  }
+
+  .taskItem {
+    flex-wrap: wrap;
+  }
+
+  .taskActions {
+    flex-direction: column-reverse;
+  }
+
+  .taskActions * {
+    visibility: visible;
+  }
+}
+
 // Style tasks
 .Tasks {
   display: flex;
@@ -225,7 +259,7 @@ ul {
 }
 
 .Task {
-  width:100%;
+  width: 100%;
   display: flex;
   justify-content: flex-start;
 }
@@ -277,6 +311,9 @@ em {
 }
 
 .logOut {
+  @media (max-width: 750px) {
+    margin-left: 20px;
+  }
   margin: 0px 10px 0px auto;
   padding: 10px;
   display: flex;

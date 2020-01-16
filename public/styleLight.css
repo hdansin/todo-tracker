@@ -8,11 +8,11 @@ body,
   width: 100%; }
 
 body {
-  background: #ECEFF4;
-  color: #2E3440; }
+  background: #eceff4;
+  color: #2e3440; }
 
 a {
-  color: #5E81AC; }
+  color: #5e81ac; }
 
 #root {
   display: flex;
@@ -20,23 +20,23 @@ a {
 
 input[type="text"],
 input[type="date"] {
-  background: #ECEFF4;
+  background: #eceff4;
   margin: 2px;
-  border-bottom: solid 2px #2E3440;
+  border-bottom: solid 2px #2e3440;
   border-top: none;
   border-left: none;
   border-right: none; }
 
 input[type="submit"] {
-  background: #5E81AC;
-  color: #ECEFF4;
+  background: #5e81ac;
+  color: #eceff4;
   margin: 2px;
   border: none;
   border-radius: 5px; }
 
 .taskItem > form > input[type="submit"] {
   background: none;
-  color: #2E3440;
+  color: #2e3440;
   font-size: 16px; }
 
 .View {
@@ -51,7 +51,7 @@ input[type="submit"] {
   align-items: left;
   justify-content: space-between;
   width: 100%;
-  background: #ECEFF4; }
+  background: #eceff4; }
 
 ul {
   display: flex;
@@ -70,7 +70,7 @@ ul {
   opacity: 0;
   border-radius: 3px;
   background: none;
-  color: #ECEFF4;
+  color: #eceff4;
   transition: all 0.5s ease-out; }
 
 #showUncompleted input[type="submit"],
@@ -92,7 +92,7 @@ ul {
 #sortByDueDate input[type="submit"]:hover,
 #sortByDateCompleted input[type="submit"]:hover,
 #viewFull input[type="submit"]:hover {
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 .showMenu:hover #showAll,
 .showMenu:hover #showCompleted,
@@ -125,7 +125,7 @@ ul {
 #orderToggleButton:hover,
 #changeThemeButton:hover {
   cursor: pointer;
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 #tagList {
   display: flex;
@@ -133,11 +133,11 @@ ul {
   height: auto;
   width: auto;
   background: #3b4252;
-  color: #ECEFF4; }
+  color: #eceff4; }
 
 #tagOption {
   background: #3b4252;
-  color: #ECEFF4;
+  color: #eceff4;
   border-radius: 3px;
   height: 0px;
   opacity: 0;
@@ -149,7 +149,7 @@ ul {
   transition: all 0.5s ease-out; }
 
 #tagOption:hover {
-  background: #5E81AC; }
+  background: #5e81ac; }
 
 .displayMenu {
   display: flex;
@@ -166,10 +166,32 @@ ul {
   width: auto;
   padding-left: 10px;
   background: #3b4252;
-  color: #ECEFF4; }
+  color: #eceff4; }
 
 .showMenu:hover {
   cursor: default; }
+
+@media (max-width: 750px) {
+  .displayMenu {
+    flex-direction: column;
+    align-items: left;
+    width: 80%; }
+  .showButtons {
+    width: 90%; }
+  .Tasks {
+    align-items: left;
+    justify-content: left;
+    margin: 5px; }
+  .mobileMenu {
+    opacity: 1;
+    margin: 10px;
+    visibility: collapse; }
+  .taskItem {
+    flex-wrap: wrap; }
+  .taskActions {
+    flex-direction: column-reverse; }
+  .taskActions * {
+    visibility: visible; } }
 
 .Tasks {
   display: flex;
@@ -225,6 +247,9 @@ em {
   padding: 10px;
   display: flex;
   align-items: center; }
+  @media (max-width: 750px) {
+    .logOut {
+      margin-left: 20px; } }
 
 .logOutButton {
   padding: 5px;
@@ -232,11 +257,11 @@ em {
   transition: all 1s ease-out; }
 
 .logOutButton:hover {
-  background: #5E81AC;
+  background: #5e81ac;
   cursor: pointer; }
 
 .logOut a {
-  color: #ECEFF4;
+  color: #eceff4;
   text-decoration: none; }
 
 .NavButtons {
@@ -252,9 +277,9 @@ em {
   align-items: center;
   height: 55px;
   width: 150px;
-  background: #5E81AC;
+  background: #5e81ac;
   border-radius: 30px;
   font-size: 16px;
   font-weight: bold;
-  color: #ECEFF4;
+  color: #eceff4;
   text-transform: capitalize; }

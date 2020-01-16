@@ -3,10 +3,10 @@ extends layout
 
 block layout-content
   head
-    if theme == "light"
-      link(rel="stylesheet" href="/styleLight.css")
-    else
+    if theme == "dark"
       link(rel="stylesheet" href="/styleDark.css")
+    else
+      link(rel="stylesheet" href="/styleLight.css")
   div.View.UserView
     div.Message
       h1 Hi, #{userProfile.nickname}!
@@ -76,7 +76,7 @@ block layout-content
         if(task.show)
           div.Task
             div.taskBody
-              div.taskItem
+              div.taskItem.taskActions
                 form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
                   input(type="submit" title="delete task" name="submit" value="✗")
