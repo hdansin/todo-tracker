@@ -2,9 +2,17 @@ extends layout
 
 block layout-content
   div.View
+    h1 Welcome to Do It!
     div.Message
-        h1 Welcome to Do It!
-        h3 A todo tracker featuring authentication with Auth0 and storage via MongoDB. 
+      div.Feature
+        img.FeatureImg(alt="A picture of a todo list application." src="/trackerBrowser.png")
+        h3 Do It! is built to help you manage and focus on todo items for projects large and small.
+      div.Feature
+        img.FeatureImg(alt="A picture of Auth0's login page." src="/auth0.png")
+        h3 Integration with Auth0 ensures convenient and secure user sign-on.
+      div.Feature
+        img.FeatureImg(alt="A picture of Auth0's login page." src="/mongodb.png")
+        h3 Storage via MongoDB provides stability and performance.
     div.NavButtons
       if isAuthenticated
         a(href="/user")
