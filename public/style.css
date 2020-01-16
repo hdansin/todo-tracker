@@ -5,7 +5,8 @@ html,
 body,
 #root {
   height: 100%;
-  width: 100%; }
+  width: 100%;
+  font-family: 'Source Sans Pro', sans-serif; }
 
 body {
   background: #ECEFF4;
@@ -43,15 +44,32 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto; }
 
 .Message {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: left;
-  justify-content: space-between;
+  justify-content: center;
+  margin-bottom: 15px;
   width: 100%;
   background: #ECEFF4; }
+
+.Feature {
+  flex-grow: 1;
+  max-width: 360px;
+  background: #2E3440;
+  color: #ECEFF4;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: solid 2px #88c0d0; }
+
+.FeatureImg {
+  max-width: 345px;
+  border-radius: 2px; }
 
 ul {
   display: flex;

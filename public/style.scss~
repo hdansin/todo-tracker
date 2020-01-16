@@ -3,6 +3,7 @@ $fg0: #2E3440;
 $fg1: #3b4252;
 $bg0: #ECEFF4;
 $link: #5E81AC;
+$hl: #88c0d0;
 $tags: #a3be8c;
 
 * {
@@ -60,16 +61,35 @@ input[type="submit"] {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   margin: 0 auto;
 }
 
 .Message {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   align-items: left;
-  justify-content: space-between;
+  justify-content: center;
+  margin-bottom: 15px;
   width: 100%;
   background: $bg0;
+}
+
+.Feature {
+  flex-grow: 1;
+  max-width: 360px;
+  background: $fg0;
+  color: $bg0;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  border: solid 2px $hl;
+}
+
+.FeatureImg {
+  max-width: 345px;
+  border-radius: 2px;
 }
 
 // style the show/view buttons
@@ -242,6 +262,7 @@ ul {
   justify-content: space-between;
 }
 
+// Hide task option buttons unless hovering
 #deleteTask,
 #duplicateTask,
 #showEditForm {
