@@ -65,6 +65,7 @@ ul {
 #viewRegular,
 #viewFull,
 #sortByDateCompleted,
+#sortByDateCreated,
 #sortByDueDate {
   height: 0px;
   opacity: 0;
@@ -80,6 +81,7 @@ ul {
 #viewRegular input[type="submit"],
 #sortByDueDate input[type="submit"],
 #sortByDateCompleted input[type="submit"],
+#sortByDateCreated input[type="submit"],
 #viewFull input[type="submit"] {
   background: none;
   transition: all 1s ease-out; }
@@ -91,6 +93,7 @@ ul {
 #viewRegular input[type="submit"]:hover,
 #sortByDueDate input[type="submit"]:hover,
 #sortByDateCompleted input[type="submit"]:hover,
+#sortByDateCreated input[type="submit"]:hover,
 #viewFull input[type="submit"]:hover {
   background: #5e81ac; }
 
@@ -101,6 +104,7 @@ ul {
 .showMenu:hover #viewRegular,
 .showMenu:hover #sortByDueDate,
 .showMenu:hover #sortByDateCompleted,
+.showMenu:hover #sortByDateCreated,
 .showMenu:hover #viewFull {
   height: 30px;
   opacity: 1; }
@@ -110,22 +114,25 @@ ul {
   height: 30px;
   opacity: 1; }
 
-#orderToggle,
-#changeThemeToggle {
+#orderToggle {
   display: flex;
   flex-direction: column; }
 
 #orderToggleButton,
-#changeThemeButton {
+#changeTheme {
   background: none;
   font-size: 16px;
   padding: 5px;
+  border-radius: 5px;
   transition: all 1s ease-out; }
 
 #orderToggleButton:hover,
-#changeThemeButton:hover {
+#changeTheme:hover {
   cursor: pointer;
   background: #5e81ac; }
+
+#changeThemeButton {
+  display: none; }
 
 #tagList {
   display: flex;
@@ -283,3 +290,6 @@ em {
   font-weight: bold;
   color: #eceff4;
   text-transform: capitalize; }
+
+.fa-cloud-moon {
+  color: #eceff4; }

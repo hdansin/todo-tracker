@@ -395,6 +395,26 @@ app.get("/sortByDateCompleted", upload.none(), secured, (req, res, next) => {
   });
 });
 
+app.get("/sortByDateCreated", upload.none(), secured, (req, res, next) => {
+  const { _raw, _json, ...userProfile } = req.user;
+  User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {
+    if (err) return debug(err);
+    let newList = taskUser.task_list;
+    taskUser.task_list = newList.sort(function(a, b) {
+      a = new Date(a.dateCreated);
+      b = new Date(b.dateCreated);
+      return a - b;
+    });
+    debug(newList);
+    taskUser.sort = "dateCreated";
+    taskUser.save(function(err) {
+      if (err) return debug(err);
+    });
+  }).then(function() {
+    res.redirect("/user");
+  });
+});
+
 app.get("/sortByDueDate", upload.none(), secured, (req, res, next) => {
   const { _raw, _json, ...userProfile } = req.user;
   User.findOne({ user_id: userProfile.user_id }, function(err, taskUser) {

@@ -55,11 +55,20 @@ block layout-content
               div#sortByDateCompleted
                 form(action="/sortByDateCompleted" name="sortByDateCompleted" method="get")
                   input(name="sortByDateCompleted" type="submit" value=sort ? sort == "dateCompleted" ? "Date Completed ✓" : "Date Completed" : "Date Completed")
+            li
+              div#sortByDateCreated
+                form(action="/sortByDateCreated" name="sortByDateCreated" method="get")
+                  input(name="sortByDateCreated" type="submit" value=sort ? sort == "dateCreated" ? "Date Created ✓" : "Date Created" : "Date Created")
+
 
           div.logOut
-            form(id="changeTheme" action="/changeTheme" name="changeTheme" method="get")
-              input(name="changeTheme" title="change theme" id="changeThemeButton" type="submit" value=theme == "light" ? "☾": "☼")
-            form(id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
+            form(title="switch theme" id="changeTheme" action="/changeTheme" name="changeTheme" method="get")
+              if theme == "light"
+                label(class="fas fa-cloud-moon" for="changeThemeButton")
+              else
+                label(class="fas fa-sun" for="changeThemeButton")
+              input(name="changeTheme" title="change theme" id="changeThemeButton" type="submit" value="")
+            form(title="switch order" id="orderToggle" action="/orderToggle" name="orderToggle" method="get")
               input(name="orderToggle" id="orderToggleButton" type="submit" value=display == "descending" ? "Order ↓" : "Order ↑")
 
             a(href="/logout")
@@ -77,19 +86,26 @@ block layout-content
           div.Task
             div.taskBody
               div.taskItem.taskActions
-                form(id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
+                form(title="delete task" id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  input(type="submit" title="delete task" name="submit" value="✗")
-                form(id="duplicateTask" action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
+                  label(class="far fa-trash-alt" for="deleteTaskButton")
+                  input(id="deleteTaskButton" type="submit" title="delete task" name="submit" value="")
+                form(title="duplicate task" id="duplicateTask" action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  input(type="submit" title="duplicate task" name="submit" value="↻")
-                form(id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
+                  label(class="fas fa-sync" for="duplicateTaskButton")
+                  input(id="duplicateTaskButton" type="submit" title="duplicate task" name="submit" value="")
+                form(title="edit task" id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
                   input(type="hidden" name="taskId" id="taskId" value=task._id)
-                  input(type="submit" title="edit task" name="submit" value="✎")
+                  label(class="far fa-edit" for="editTaskButton")
+                  input(id="editTaskButton" type="submit" title="edit task" name="submit" value="")
 
-                form(id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
+                form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=task._id)
-                  input(type="submit" title="mark done" name="doneTask" id=task._id formaction="/done" formmethod="post" value=task.done ? "☑" : "☐")
+                  if task.done
+                    label(class="far fa-check-square" for=task._id)
+                  else 
+                    label(class="far fa-square" for=task._id)
+                  input(id=task._id type="submit" title="doneTask" name="doneTask" formaction="/done" formmethod="post" value="")
               div.taskItem
                 if task.done
                   s= task.body

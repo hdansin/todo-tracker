@@ -85,6 +85,7 @@ ul {
 #viewMinimal,
 #viewRegular,
 #viewFull,
+#sortByDateCreated,
 #sortByDateCompleted,
 #sortByDueDate {
   height: 0px;
@@ -103,6 +104,7 @@ ul {
 #viewRegular input[type="submit"],
 #sortByDueDate input[type="submit"],
 #sortByDateCompleted input[type="submit"],
+#sortByDateCreated input[type="submit"],
 #viewFull input[type="submit"] {
   background: none;
   transition: all 1s ease-out;
@@ -115,6 +117,7 @@ ul {
 #viewRegular input[type="submit"]:hover,
 #sortByDueDate input[type="submit"]:hover,
 #sortByDateCompleted input[type="submit"]:hover,
+#sortByDateCreated input[type="submit"]:hover,
 #viewFull input[type="submit"]:hover {
   background: $link;
 }
@@ -127,6 +130,7 @@ ul {
 .showMenu:hover #viewRegular,
 .showMenu:hover #sortByDueDate,
 .showMenu:hover #sortByDateCompleted,
+.showMenu:hover #sortByDateCreated,
 .showMenu:hover #viewFull {
   height: 30px;
   opacity: 1;
@@ -139,23 +143,28 @@ ul {
 }
 
 #orderToggle,
-#changeThemeToggle {
+#changeTheme {
   display: flex;
   flex-direction: column;
 }
 
 #orderToggleButton,
-#changeThemeButton {
+#changeTheme {
   background: none;
   font-size: 16px;
   padding: 5px;
+  border-radius: 5px;
   transition: all 1s ease-out;
 }
 
 #orderToggleButton:hover,
-#changeThemeButton:hover {
+#changeTheme:hover {
   cursor: pointer;
   background: $link;
+}
+
+#changeThemeButton {
+  display: none;
 }
 
 // Style tags
@@ -290,7 +299,7 @@ ul {
 #deleteTask,
 #duplicateTask,
 #showEditForm {
-  visibility: hidden;
+  visibility: collapse;
 }
 
 .taskBody:hover #duplicateTask,
@@ -362,4 +371,8 @@ em {
   color: $bg0;
 
   text-transform: capitalize;
+}
+
+.fa-sun {
+  color: $bg0;
 }
