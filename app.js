@@ -706,6 +706,8 @@ app.post("/showEditForm", upload.none(), secured, (req, res, next) => {
     let newList = taskUser.task_list;
     for (const task in newList) {
       if (newList[task]._id == req.body.taskId) {
+        debug(req.body.taskId);
+        debug(newList);
         newList[task].edit = true;
       }
     }

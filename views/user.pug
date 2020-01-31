@@ -88,16 +88,18 @@ block layout-content
               div.taskItem.taskActions
                 form(title="delete task" id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  label(class="far fa-trash-alt" for="deleteTaskButton")
-                  input(id="deleteTaskButton" type="submit" title="delete task" name="submit" value="")
+                  label(class="far fa-trash-alt" for=task._id + "delete")
+                  input(id=task._id + "delete" type="submit" title="delete task" name="submit" value="")
+
                 form(title="duplicate task" id="duplicateTask" action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  label(class="fas fa-sync" for="duplicateTaskButton")
-                  input(id="duplicateTaskButton" type="submit" title="duplicate task" name="submit" value="")
+                  label(class="fas fa-sync" for=task._id + "duplicate")
+                  input(id=task._id + "duplicate" type="submit" title="duplicate task" name="submit" value="")
+
                 form(title="edit task" id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
                   input(type="hidden" name="taskId" id="taskId" value=task._id)
-                  label(class="far fa-edit" for="editTaskButton")
-                  input(id="editTaskButton" type="submit" title="edit task" name="submit" value="")
+                  label(class="far fa-edit" for=task._id + "edit")
+                  input(id=task._id + "edit" type="submit" title="edit task" name="submit" value="")
 
                 form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=task._id)
