@@ -21,18 +21,15 @@ a {
 input[type="text"],
 input[type="date"] {
   background: #eceff4;
+  color: #3b4252;
   margin: 2px;
+  min-height: 50px;
   border-bottom: solid 2px #2e3440;
-  border-top: none;
-  border-left: none;
-  border-right: none; }
+  border-radius: 3px;
+  padding: 5px; }
 
-input[type="submit"] {
-  background: #5e81ac;
-  color: #eceff4;
-  margin: 2px;
-  border: none;
-  border-radius: 5px; }
+input[type="text"]:focus {
+  border-bottom: solid 2px #5e81ac; }
 
 .taskItem > form > input[type="submit"] {
   background: none;
@@ -200,6 +197,10 @@ ul {
   .taskActions * {
     visibility: visible; } }
 
+#showTaskActions {
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s; }
+
 .Tasks {
   display: flex;
   flex-direction: column;
@@ -218,6 +219,9 @@ ul {
   display: flex;
   justify-content: space-evenly; }
 
+.taskBody:hover #showTaskActions {
+  transform: rotate(90deg); }
+
 .taskInfo {
   display: flex; }
 
@@ -225,20 +229,6 @@ ul {
   display: flex;
   padding-left: 10px;
   justify-content: space-between; }
-
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: hidden; }
-
-.taskBody:hover #deleteTask {
-  visibility: visible; }
-
-.taskBody:hover #duplicateTask {
-  visibility: visible; }
-
-.taskBody:hover #showEditForm {
-  visibility: visible; }
 
 #editTask {
   width: 100%; }

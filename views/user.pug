@@ -101,6 +101,8 @@ block layout-content
                   label(class="far fa-edit" for=task._id + "edit")
                   input(id=task._id + "edit" type="submit" title="edit task" name="submit" value="")
 
+                i(id="showTaskActions" class="fas fa-ellipsis-v")
+
                 form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=task._id)
                   if task.done

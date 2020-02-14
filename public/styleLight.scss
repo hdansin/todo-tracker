@@ -30,22 +30,20 @@ a {
   flex-direction: column;
 }
 
+// Style text inputs
 input[type="text"],
 input[type="date"] {
   background: $bg0;
+  color: $fg1;
   margin: 2px;
+  min-height: 50px;
   border-bottom: solid 2px $fg0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  border-radius: 3px;
+  padding: 5px;
 }
 
-input[type="submit"] {
-  background: $link;
-  color: $bg0;
-  margin: 2px;
-  border: none;
-  border-radius: 5px;
+input[type="text"]:focus {
+  border-bottom: solid 2px $link;
 }
 
 .taskItem > form > input[type="submit"] {
@@ -255,6 +253,11 @@ ul {
   }
 }
 
+#showTaskActions {
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s;
+}
+
 // Style tasks
 .Tasks {
   display: flex;
@@ -266,6 +269,7 @@ ul {
   margin: 20px 0px 20px 0px;
 }
 
+// Style tasks
 .Task {
   width: 100%;
   display: flex;
@@ -277,6 +281,10 @@ ul {
   justify-content: space-evenly;
 }
 
+.taskBody:hover #showTaskActions {
+  transform: rotate(90deg);
+}
+
 .taskInfo {
   display: flex;
 }
@@ -285,25 +293,6 @@ ul {
   display: flex;
   padding-left: 10px;
   justify-content: space-between;
-}
-
-// Hide task option buttons unless hovering
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: hidden;
-}
-
-.taskBody:hover #deleteTask {
-  visibility: visible;
-}
-
-.taskBody:hover #duplicateTask {
-  visibility: visible;
-}
-
-.taskBody:hover #showEditForm {
-  visibility: visible;
 }
 
 #editTask {

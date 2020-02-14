@@ -30,15 +30,20 @@ a {
   flex-direction: column;
 }
 
+// Style text inputs
 input[type="text"],
 input[type="date"] {
   background: $bg0;
   color: $fg1;
   margin: 2px;
+  min-height: 50px;
   border-bottom: solid 2px $fg0;
-  border-top: none;
-  border-left: none;
-  border-right: none;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+input[type="text"]:focus {
+  border-bottom: solid 2px $link;
 }
 
 input[type="submit"] {
@@ -263,6 +268,11 @@ ul {
   }
 }
 
+#showTaskActions {
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s;
+}
+
 // Style tasks
 .Tasks {
   display: flex;
@@ -295,17 +305,14 @@ ul {
   justify-content: space-between;
 }
 
-// Hide task option buttons unless hovering
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: collapse;
-}
-
 .taskBody:hover #duplicateTask,
 .taskBody:hover #deleteTask,
 .taskBody:hover #showEditForm {
   visibility: visible;
+}
+
+.taskBody:hover #showTaskActions {
+  transform: rotate(90deg);
 }
 
 #editTask {

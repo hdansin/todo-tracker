@@ -23,10 +23,13 @@ input[type="date"] {
   background: #2e3440;
   color: #e5e9f0;
   margin: 2px;
+  min-height: 50px;
   border-bottom: solid 2px #eceff4;
-  border-top: none;
-  border-left: none;
-  border-right: none; }
+  border-radius: 3px;
+  padding: 5px; }
+
+input[type="text"]:focus {
+  border-bottom: solid 2px #5e81ac; }
 
 input[type="submit"] {
   background: #5e81ac;
@@ -207,6 +210,10 @@ ul {
   .taskActions * {
     visibility: visible; } }
 
+#showTaskActions {
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s; }
+
 .Tasks {
   display: flex;
   flex-direction: column;
@@ -233,15 +240,13 @@ ul {
   padding-left: 10px;
   justify-content: space-between; }
 
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: collapse; }
-
 .taskBody:hover #duplicateTask,
 .taskBody:hover #deleteTask,
 .taskBody:hover #showEditForm {
   visibility: visible; }
+
+.taskBody:hover #showTaskActions {
+  transform: rotate(90deg); }
 
 #editTask {
   width: 100%; }
