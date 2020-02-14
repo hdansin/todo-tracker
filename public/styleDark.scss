@@ -262,13 +262,12 @@ ul {
   .taskActions {
     flex-direction: column-reverse;
   }
-
-  .taskActions * {
-    visibility: visible;
-  }
 }
 
 #showTaskActions {
+  @media (max-width: 750px) {
+    margin-right: 5px;
+  }
   margin: 5px 18px 5px 5px;
   transition: all 0.5s;
 }

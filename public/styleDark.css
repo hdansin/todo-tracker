@@ -206,13 +206,14 @@ ul {
   .taskItem {
     flex-wrap: wrap; }
   .taskActions {
-    flex-direction: column-reverse; }
-  .taskActions * {
-    visibility: visible; } }
+    flex-direction: column-reverse; } }
 
 #showTaskActions {
   margin: 5px 18px 5px 5px;
   transition: all 0.5s; }
+  @media (max-width: 750px) {
+    #showTaskActions {
+      margin-right: 5px; } }
 
 .Tasks {
   display: flex;
