@@ -241,14 +241,6 @@ ul {
   padding-left: 10px;
   justify-content: space-between; }
 
-.taskBody:hover #duplicateTask,
-.taskBody:hover #deleteTask,
-.taskBody:hover #showEditForm {
-  visibility: visible; }
-
-.taskBody:hover #showTaskActions {
-  transform: rotate(90deg); }
-
 #editTask {
   width: 100%; }
 

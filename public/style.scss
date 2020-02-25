@@ -270,18 +270,6 @@ ul {
   visibility: hidden;
 }
 
-.taskBody:hover #deleteTask {
-  visibility: visible;
-}
-
-.taskBody:hover #duplicateTask {
-  visibility: visible;
-}
-
-.taskBody:hover #showEditForm {
-  visibility: visible;
-}
-
 #editTask {
   width: 100%;
 }

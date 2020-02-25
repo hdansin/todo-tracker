@@ -304,15 +304,16 @@ ul {
   justify-content: space-between;
 }
 
-.taskBody:hover #duplicateTask,
-.taskBody:hover #deleteTask,
-.taskBody:hover #showEditForm {
-  visibility: visible;
-}
+//.taskBody:hover #duplicateTask,
+// .taskBody:hover #deleteTask,
+// .taskBody:hover #showEditForm {
+//  visibility: visible;
+//}
 
-.taskBody:hover #showTaskActions {
-  transform: rotate(90deg);
-}
+//.taskBody:hover #showTaskActions {
+//  transform: rotate(90deg);
+// }
+
 
 #editTask {
   width: 100%;

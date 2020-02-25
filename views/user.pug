@@ -7,12 +7,13 @@ block layout-content
       link(rel="stylesheet" href="/styleDark.css")
     else
       link(rel="stylesheet" href="/styleLight.css")
+    script(src="/scripts/ui.js")
   div.View.UserView
     div.Message
       h1 Hi, #{userProfile.nickname}!
       h3 Let's get to work:
       div.showButtons
-        nav.displayMenu
+        nav.displayMenu(role="navigation")
           ul.showMenu Show
             li 
               div#showAll
@@ -85,7 +86,7 @@ block layout-content
         if(task.show)
           div.Task
             div.taskBody
-              div.taskItem.taskActions
+              div.taskItem.taskActions(id="taskActionContainer")
                 form(title="delete task" id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
                   input(id="taskId" name="taskId" type="hidden" value=task._id)
                   label(class="far fa-trash-alt" for=task._id + "delete")
@@ -101,7 +102,7 @@ block layout-content
                   label(class="far fa-edit" for=task._id + "edit")
                   input(id=task._id + "edit" type="submit" title="edit task" name="submit" value="")
 
-                i(id="showTaskActions" class="fas fa-ellipsis-v")
+                i(id="showTaskActions" class="fas fa-ellipsis-v" onclick="showTaskActions();")
 
                 form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=task._id)
