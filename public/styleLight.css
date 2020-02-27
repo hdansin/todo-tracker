@@ -22,11 +22,7 @@ input[type="text"],
 input[type="date"] {
   background: #eceff4;
   color: #3b4252;
-  margin: 2px;
-  min-height: 50px;
-  border-bottom: solid 2px #2e3440;
-  border-radius: 3px;
-  padding: 5px; }
+  border-bottom: solid 2px #2e3440; }
 
 input[type="text"]:focus {
   border-bottom: solid 2px #5e81ac; }
@@ -194,13 +190,6 @@ ul {
     flex-wrap: wrap; }
   .taskActions {
     flex-direction: column-reverse; } }
-
-#showTaskActions {
-  margin: 5px 18px 5px 5px;
-  transition: all 0.5s; }
-  @media (max-width: 750px) {
-    #showTaskActions {
-      margin-right: 5px; } }
 
 .Tasks {
   display: flex;

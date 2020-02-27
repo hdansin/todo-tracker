@@ -22,11 +22,13 @@ a {
 input[type="text"],
 input[type="date"] {
   background: #eceff4;
-  margin: 2px;
-  border-bottom: solid 2px #2e3440;
   border-top: none;
   border-left: none;
-  border-right: none; }
+  border-right: none;
+  margin: 2px;
+  border-radius: 3px;
+  padding: 5px;
+  transition: all 0.5s; }
 
 input[type="submit"] {
   background: #5e81ac;
@@ -205,7 +207,7 @@ ul {
 
 .taskBody {
   display: flex;
-  justify-content: space-evenly; }
+  justify-content: flex-start; }
 
 .taskInfo {
   display: flex; }
@@ -214,6 +216,9 @@ ul {
   display: flex;
   padding-left: 10px;
   justify-content: space-between; }
+
+.hiddenActions {
+  display: flex; }
 
 .hiddenActions > * {
   visibility: collapse; }
@@ -225,7 +230,14 @@ ul {
   width: 0;
   height: 0; }
 
-#showTaskActions:hover {
+.showTaskActions {
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s; }
+  @media (max-width: 750px) {
+    .showTaskActions {
+      margin-right: 5px; } }
+
+.showTaskActions:hover {
   cursor: pointer; }
 
 #editTask {

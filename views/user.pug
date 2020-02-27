@@ -104,7 +104,7 @@ block layout-content
                     label(class="far fa-edit")
                       input(id="edit" + Id type="submit" title="edit task" name="submit" value="")
 
-                i(id="showTaskActions" class="fas fa-ellipsis-v" onclick="showTaskActions(\"" + Id + "\");")
+                i(id="showTaskActions" + Id class="showTaskActions fas fa-ellipsis-v" onclick="showTaskActions(\"" + Id + "\");")
 
                 form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
                   input(type="hidden" id="taskId" name="taskId" value=Id)

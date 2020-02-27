@@ -35,11 +35,13 @@ a {
 input[type="text"],
 input[type="date"] {
   background: $bg0;
-  margin: 2px;
-  border-bottom: solid 2px $fg0;
   border-top: none;
   border-left: none;
   border-right: none;
+  margin: 2px;
+  border-radius: 3px;
+  padding: 5px;
+  transition: all 0.5s;
 }
 
 input[type="submit"] {
@@ -250,7 +252,7 @@ ul {
 
 .taskBody {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
 }
 
 .taskInfo {
@@ -264,6 +266,10 @@ ul {
 }
 
 // Hide task option buttons unless clicked
+.hiddenActions {
+  display: flex;
+}
+
 .hiddenActions > * {
   visibility: collapse;
 }
@@ -277,7 +283,16 @@ ul {
   height: 0;
 }
 
-#showTaskActions:hover {
+.showTaskActions {
+  @media (max-width: 750px) {
+    margin-right: 5px;
+  }
+  margin: 5px 18px 5px 5px;
+  transition: all 0.5s;
+}
+
+
+.showTaskActions:hover {
   cursor: pointer;
 }
 
