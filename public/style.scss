@@ -263,11 +263,22 @@ ul {
   justify-content: space-between;
 }
 
-// Hide task option buttons unless hovering
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: hidden;
+// Hide task option buttons unless clicked
+.hiddenActions > * {
+  visibility: collapse;
+}
+
+.hiddenActions > form > label:hover {
+  cursor: pointer;
+}
+
+.hiddenActions > form > label > input[type='submit'] {
+  width: 0;
+  height: 0;
+}
+
+#showTaskActions:hover {
+  cursor: pointer;
 }
 
 #editTask {

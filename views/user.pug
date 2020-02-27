@@ -83,34 +83,36 @@ block layout-content
           var listArr = taskList
       
       each task in listArr
+        - const Id = task._id.toString();
         if(task.show)
           div.Task
             div.taskBody
               div.taskItem.taskActions(id="taskActionContainer")
-                form(title="delete task" id="deleteTask" action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
-                  input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  label(class="far fa-trash-alt" for=task._id + "delete")
-                  input(id=task._id + "delete" type="submit" title="delete task" name="submit" value="")
+                div.hiddenActions
+                  form(title="delete task" id="deleteTask" + Id action="/deleteTask" enctype="multipart/form-data" name="deleteTask" method="post")
+                    input(id="taskId" name="taskId" type="hidden" value=Id)
+                    label(class="far fa-trash-alt")
+                      input(id="delete" + Id type="submit" title="delete task" name="submit" value="")
 
-                form(title="duplicate task" id="duplicateTask" action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
-                  input(id="taskId" name="taskId" type="hidden" value=task._id)
-                  label(class="fas fa-sync" for=task._id + "duplicate")
-                  input(id=task._id + "duplicate" type="submit" title="duplicate task" name="submit" value="")
+                  form(title="duplicate task" id="duplicateTask" + Id action="/duplicateTask" enctype="multipart/form-data" name="duplicateTask" method="post")
+                    input(id="taskId" name="taskId" type="hidden" value=Id)
+                    label(class="fas fa-sync")
+                      input(id="duplicate" + Id type="submit" title="duplicate task" name="submit" value="")
 
-                form(title="edit task" id="showEditForm" action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
-                  input(type="hidden" name="taskId" id="taskId" value=task._id)
-                  label(class="far fa-edit" for=task._id + "edit")
-                  input(id=task._id + "edit" type="submit" title="edit task" name="submit" value="")
+                  form(title="edit task" id="showEditForm" + Id action="/showEditForm" enctype="multipart/form-data" name="showEditForm" method="post")
+                    input(type="hidden" name="taskId" id="taskId" value=Id)
+                    label(class="far fa-edit")
+                      input(id="edit" + Id type="submit" title="edit task" name="submit" value="")
 
-                i(id="showTaskActions" class="fas fa-ellipsis-v" onclick="showTaskActions();")
+                i(id="showTaskActions" class="fas fa-ellipsis-v" onclick="showTaskActions(\"" + Id + "\");")
 
                 form(title="complete task" id="markDone" action="/done" enctype="multipart/form-data" name="doneTask" method="post")
-                  input(type="hidden" id="taskId" name="taskId" value=task._id)
+                  input(type="hidden" id="taskId" name="taskId" value=Id)
                   if task.done
-                    label(class="far fa-check-square" for=task._id)
+                    label(class="far fa-check-square" for=Id)
                   else 
-                    label(class="far fa-square" for=task._id)
-                  input(id=task._id type="submit" title="doneTask" name="doneTask" formaction="/done" formmethod="post" value="")
+                    label(class="far fa-square" for=Id)
+                  input(id=Id type="submit" title="doneTask" name="doneTask" formaction="/done" formmethod="post" value="")
               div.taskItem
                 if task.done
                   s= task.body
@@ -123,7 +125,7 @@ block layout-content
                     input(type="text" name="description" value=task.description placeholder=task.description)
                     input(type="text" name="tags" value=task.tags.toString())
                     input(type="date" name="dueDate" value=task.dueDate)
-                    input(type="hidden" name="taskId" id="taskId" value=task._id)
+                    input(type="hidden" name="taskId" id="taskId" value=Id)
                     input(type="submit" name="submit" value="✓")
             if(view !== "minimal")
               if(task.description)

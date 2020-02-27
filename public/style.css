@@ -215,10 +215,18 @@ ul {
   padding-left: 10px;
   justify-content: space-between; }
 
-#deleteTask,
-#duplicateTask,
-#showEditForm {
-  visibility: hidden; }
+.hiddenActions > * {
+  visibility: collapse; }
+
+.hiddenActions > form > label:hover {
+  cursor: pointer; }
+
+.hiddenActions > form > label > input[type='submit'] {
+  width: 0;
+  height: 0; }
+
+#showTaskActions:hover {
+  cursor: pointer; }
 
 #editTask {
   width: 100%; }
