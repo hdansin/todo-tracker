@@ -279,8 +279,7 @@ ul {
 }
 
 .hiddenActions > form > label > input[type='submit'] {
-  width: 0;
-  height: 0;
+  visibility: collapse;
 }
 
 .showTaskActions {
@@ -291,6 +290,10 @@ ul {
   transition: all 0.5s;
 }
 
+#markDone {
+  display: flex;
+  align-items: center;
+}
 
 .showTaskActions:hover {
   cursor: pointer;

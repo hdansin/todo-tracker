@@ -227,8 +227,7 @@ ul {
   cursor: pointer; }
 
 .hiddenActions > form > label > input[type='submit'] {
-  width: 0;
-  height: 0; }
+  visibility: collapse; }
 
 .showTaskActions {
   margin: 5px 18px 5px 5px;
@@ -236,6 +235,10 @@ ul {
   @media (max-width: 750px) {
     .showTaskActions {
       margin-right: 5px; } }
+
+#markDone {
+  display: flex;
+  align-items: center; }
 
 .showTaskActions:hover {
   cursor: pointer; }
