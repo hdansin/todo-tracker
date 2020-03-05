@@ -234,7 +234,7 @@ ul {
   transition: all 0.5s; }
   @media (max-width: 750px) {
     .showTaskActions {
-      margin-right: 5px; } }
+      width: 10px; } }
 
 #markDone {
   display: flex;
